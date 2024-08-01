@@ -1,0 +1,26 @@
+.Button__root {
+  border: 0px;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.Button__root:hover {
+  background-color: #ddd;
+}
+.Button__small {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 13px;
+}
+.Button__disabled {
+  cursor: not-allowed;
+}
+.Button__disabled:hover {
+  background-color: #eee;
+}

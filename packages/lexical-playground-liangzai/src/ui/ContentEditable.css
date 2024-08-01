@@ -1,0 +1,37 @@
+.ContentEditable__root {
+  box-sizing: border-box;
+  display: block;
+  position: relative;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  padding-left: 28px;
+  color: #000;
+  line-height: 1.7;
+  border: 0;
+  outline: 0;
+}
+@media (max-width: 1025px) {
+  .ContentEditable__root {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}
+
+.ContentEditable__placeholder {
+  overflow: hidden;
+  position: absolute;
+  top: 38px;
+  left: 28px;
+  color: rgba(0, 0, 0, 0.3);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  display: inline-block;
+}
+@media (max-width: 1025px) {
+  .ContentEditable__placeholder {
+    left: 8px;
+    right: 8px;
+  }
+}

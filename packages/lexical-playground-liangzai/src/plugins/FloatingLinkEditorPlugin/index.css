@@ -1,0 +1,41 @@
+.link-editor {
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: 375px;
+  width: 100%;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  opacity: 0;
+  transition: opacity 0.5s;
+  will-change: transform;
+  display: flex;
+}
+
+.link-editor .button {
+  display: inline-block;
+  margin: 0 2px;
+  padding: 6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.link-editor .button.hovered {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  background-color: #eee;
+}
+
+.link-editor .button i,
+.actions i {
+  background-size: contain;
+  display: inline-block;
+  height: 15px;
+  width: 15px;
+  vertical-align: -0.25em;
+}
