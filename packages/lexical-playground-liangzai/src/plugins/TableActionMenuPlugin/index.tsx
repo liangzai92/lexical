@@ -1,15 +1,7 @@
-/**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
+import type { ElementNode, LexicalEditor } from 'lexical';
 
-import type {ElementNode, LexicalEditor} from 'lexical';
-
-import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
-import {useLexicalEditable} from '@lexical/react/useLexicalEditable';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { useLexicalEditable } from '@lexical/react/useLexicalEditable';
 import {
   $deleteTableColumn__EXPERIMENTAL,
   $deleteTableRow__EXPERIMENTAL,
@@ -40,9 +32,10 @@ import {
   $isRangeSelection,
   $isTextNode,
 } from 'lexical';
-import * as React from 'react';
-import {ReactPortal, useCallback, useEffect, useRef, useState} from 'react';
-import {createPortal} from 'react-dom';
+import { ReactPortal, useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { DownOutlined } from '@ant-design/icons';
+
 import invariant from 'shared/invariant';
 
 import useModal from '../../hooks/useModal';
@@ -150,7 +143,7 @@ function currentCellBackgroundColor(editor: LexicalEditor): null | string {
 }
 
 type TableCellActionMenuProps = Readonly<{
-  contextRef: {current: null | HTMLElement};
+  contextRef: { current: null | HTMLElement };
   onClose: () => void;
   setIsMenuOpen: (isOpen: boolean) => void;
   showColorPickerModal: (
@@ -196,7 +189,7 @@ function TableActionMenu({
           setBackgroundColor(currentCellBackgroundColor(editor) || '');
         }
       },
-      {skipInitialization: true},
+      { skipInitialization: true },
     );
   }, [editor, tableCellNode]);
 
@@ -209,8 +202,8 @@ function TableActionMenu({
         updateSelectionCounts(computeSelectionCount(selection));
         setCanMergeCells(
           isTableSelectionRectangular(selection) &&
-            (currentSelectionCounts.columns > 1 ||
-              currentSelectionCounts.rows > 1),
+          (currentSelectionCounts.columns > 1 ||
+            currentSelectionCounts.rows > 1),
         );
       }
       // Unmerge cell
@@ -300,7 +293,7 @@ function TableActionMenu({
     editor.update(() => {
       const selection = $getSelection();
       if ($isTableSelection(selection)) {
-        const {columns, rows} = computeSelectionCount(selection);
+        const { columns, rows } = computeSelectionCount(selection);
         const nodes = selection.getNodes();
         let firstCell: null | TableCellNode = null;
         for (let i = 0; i < nodes.length; i++) {
@@ -498,7 +491,7 @@ function TableActionMenu({
           className="item"
           onClick={() => mergeTableCellsAtSelection()}
           data-test-id="table-merge-cells">
-          Merge cells
+          合并单元格
         </button>
       );
     } else if (canUnmergeCell) {
@@ -593,14 +586,14 @@ function TableActionMenu({
         className="item"
         onClick={() => deleteTableColumnAtSelection()}
         data-test-id="table-delete-columns">
-        <span className="text">Delete column</span>
+        <span className="text">删除列</span>
       </button>
       <button
         type="button"
         className="item"
         onClick={() => deleteTableRowAtSelection()}
         data-test-id="table-delete-rows">
-        <span className="text">Delete row</span>
+        <span className="text">删除行</span>
       </button>
       <button
         type="button"
@@ -616,7 +609,7 @@ function TableActionMenu({
         onClick={() => toggleTableRowIsHeader()}>
         <span className="text">
           {(tableCellNode.__headerState & TableCellHeaderStates.ROW) ===
-          TableCellHeaderStates.ROW
+            TableCellHeaderStates.ROW
             ? 'Remove'
             : 'Add'}{' '}
           row header
@@ -629,7 +622,7 @@ function TableActionMenu({
         data-test-id="table-column-header">
         <span className="text">
           {(tableCellNode.__headerState & TableCellHeaderStates.COLUMN) ===
-          TableCellHeaderStates.COLUMN
+            TableCellHeaderStates.COLUMN
             ? 'Remove'
             : 'Add'}{' '}
           column header
@@ -756,7 +749,7 @@ function TableCellActionMenuContainer({
               setIsMenuOpen(!isMenuOpen);
             }}
             ref={menuRootRef}>
-            <i className="chevron-down" />
+            <DownOutlined />
           </button>
           {colorPickerModal}
           {isMenuOpen && (

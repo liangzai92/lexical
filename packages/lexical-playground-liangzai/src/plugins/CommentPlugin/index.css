@@ -5,12 +5,15 @@
 }
 
 .CommentPlugin_AddCommentBox_button {
-  border: 0;
-  padding: 10px;
-  border-radius: 10px;
+  height: 30px;
+  width: 30px;
+  border-radius: 6px;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
   background-color: white;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .CommentPlugin_AddCommentBox_button:hover {
@@ -18,12 +21,11 @@
 }
 
 i.add-comment {
-  background-size: contain;
-  display: inline-block;
-  height: 20px;
-  width: 20px;
-  vertical-align: -10px;
+  height: 16px;
+  width: 16px;
   background-image: url(../../images/icons/chat-left-text.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 @media (max-width: 1024px) {
@@ -33,14 +35,15 @@ i.add-comment {
 }
 
 .CommentPlugin_CommentInputBox {
-  display: block;
-  position: absolute;
-  width: 250px;
-  min-height: 80px;
-  background-color: #fff;
-  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
   z-index: 24;
+  position: absolute;
+  min-height: 80px;
+  width: 250px;
+  max-width: 100%;
+  border-radius: 5px;
+  box-shadow: 0 0px 12px 0 rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  font-size: 14px;
   animation: show-input-box 0.4s ease;
 }
 
@@ -73,10 +76,12 @@ i.add-comment {
 }
 
 .CommentPlugin_CommentInputBox_Buttons {
+  padding: 6px;
+  border-top: 1px solid var(--border-color);
+  background-color: white;
   display: flex;
   flex-direction: row;
-  padding: 0 10px 10px 10px;
-  gap: 10px;
+  gap: 6px;
 }
 
 .CommentPlugin_CommentInputBox_Button {
@@ -85,7 +90,6 @@ i.add-comment {
 
 .CommentPlugin_CommentInputBox_Button.primary {
   background-color: rgb(66, 135, 245);
-  font-weight: bold;
   color: #fff;
 }
 
@@ -107,24 +111,15 @@ i.add-comment {
 }
 
 .CommentPlugin_CommentInputBox_EditorContainer {
-  position: relative;
-  margin: 10px;
-  border-radius: 5px;
+  flex-grow: 1;
+  flex-shrink: 1;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
 }
-
 .CommentPlugin_CommentInputBox_Editor {
   position: relative;
-  display: block;
   min-height: 80px;
-  padding: 9px 10px 10px 9px;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  border-radius: 5px;
   background-color: #fff;
-  caret-color: rgb(5, 5, 5);
-}
-
-.CommentPlugin_CommentInputBox_Editor:focus {
-  outline: 1px solid rgb(66, 135, 245);
 }
 
 .CommentPlugin_ShowCommentsButton {
@@ -167,10 +162,15 @@ i.comments {
   width: 300px;
   height: calc(100%);
   border-top-left-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: -1px 0 12px rgba(0, 0, 0, 0.1);
   background-color: #fff;
   font-size: 12px;
   animation: show-comments 0.2s ease;
+}
+
+.panel-body {
+  overflow-y: auto;
+  height: calc(100% - 40px);
 }
 
 @keyframes show-comments {
@@ -185,39 +185,16 @@ i.comments {
 }
 
 .CommentPlugin_CommentsPanel_Heading {
-  padding-left: 15px;
-  padding-top: 10px;
-  margin: 0;
-  height: 34px;
-  border-bottom: 1px solid #eee;
-  font-size: 20px;
-  display: block;
-  width: 100%;
-  color: #444;
   overflow: hidden;
-}
-
-.CommentPlugin_CommentsPanel_Editor {
-  position: relative;
-  display: block;
-  padding: 6px;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  border-radius: 5px;
-  background-color: #fff;
-  caret-color: rgb(5, 5, 5);
-}
-
-.CommentPlugin_CommentsPanel_Editor::before {
-  content: '';
-  width: 30px;
-  height: 20px;
-  float: right;
+  padding: 10px;
+  margin: 0;
+  width: 100%;
+  border-bottom: 1px solid #eee;
 }
 
 .CommentPlugin_CommentsPanel_SendButton {
-  position: absolute;
-  right: 10px;
-  top: 8px;
+  align-items: flex-end;
+  padding: 6px;
   background: none;
 }
 
@@ -262,27 +239,22 @@ i.send {
 }
 
 .CommentPlugin_CommentsPanel_List {
-  padding: 0;
   list-style-type: none;
   margin: 0;
   padding: 0;
-  width: 100%;
-  position: absolute;
-  top: 45px;
-  overflow-y: auto;
-  height: calc(100% - 45px);
 }
 
 .CommentPlugin_CommentsPanel_List_Comment {
   position: relative;
   margin: 0;
   padding: 10px;
+  padding-left: 0px;
   transition: all 0.2s linear;
 }
 
 .CommentPlugin_CommentsPanel_List_Comment
   + .CommentPlugin_CommentsPanel_List_Comment {
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  border-top: 1px solid var(--border-color);
 }
 
 .CommentPlugin_CommentsPanel_List_Thread.active
@@ -328,32 +300,17 @@ i.send {
 }
 
 .CommentPlugin_CommentsPanel_List_Thread.interactive:hover {
-  background-color: #fafafa;
+  background-color: rgba(255, 212, 0, 0.1);
 }
 
 .CommentPlugin_CommentsPanel_List_Thread.active {
-  border-left: 4px solid rgba(0, 0, 0, 0.05);
-  background-color: rgba(0, 0, 0, 0.05);
+  border-left: 4px solid rgba(255, 212, 0, 1);
   cursor: inherit;
 }
 
-.CommentPlugin_CommentsPanel_List_Thread_QuoteBox {
-  display: block;
-  padding-top: 10px;
-  color: #ccc;
-}
-
 .CommentPlugin_CommentsPanel_List_Thread_Quote {
-  margin: 0px 10px 0 10px;
-}
-
-.CommentPlugin_CommentsPanel_List_Thread_Quote span {
-  color: #222;
-  background-color: rgba(255, 212, 0, 0.4);
-  padding: 1px;
-  line-height: 1.4;
-  display: inline;
-  font-weight: bold;
+  margin: 0;
+  padding: 8px;
 }
 
 .CommentPlugin_CommentsPanel_List_Thread_Comments {
@@ -365,7 +322,7 @@ i.send {
   .CommentPlugin_CommentsPanel_List_Comment:first-child {
   border: none;
   margin-left: 0;
-  padding-left: 5px;
+  padding-left: 0;
 }
 
 .CommentPlugin_CommentsPanel_List_Thread_Comments
@@ -375,24 +332,30 @@ i.send {
 
 .CommentPlugin_CommentsPanel_List_Thread_Comments
   .CommentPlugin_CommentsPanel_List_Comment {
-  padding-left: 8px;
-  border-left: 4px solid #eee;
-  margin-left: 4px;
+  margin-left: 15px;
 }
 
 .CommentPlugin_CommentsPanel_List_Thread_Editor {
   position: relative;
   padding-top: 1px;
+  margin: 8px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .CommentPlugin_CommentsPanel_List_DeleteButton {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 30px;
-  height: 30px;
-  background-color: transparent;
   opacity: 0;
+  position: absolute;
+  top: 4px;
+  right: 10px;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  background-color: white;
+  transition: opacity 0.2s linear;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .CommentPlugin_CommentsPanel_DeletedComment,
@@ -404,20 +367,13 @@ i.send {
 }
 
 .CommentPlugin_CommentsPanel_List_DeleteButton:hover {
-  background-color: transparent;
   opacity: 1;
-  filter: invert(45%) sepia(98%) saturate(2299%) hue-rotate(201deg)
-    brightness(100%) contrast(92%);
 }
 
 .CommentPlugin_CommentsPanel_List_DeleteButton i.delete {
-  background-size: contain;
-  position: absolute;
-  left: 5px;
-  top: 5px;
-  height: 15px;
-  width: 15px;
-  vertical-align: -10px;
+  height: 14px;
+  width: 14px;
   background-image: url(../../images/icons/trash3.svg);
-  transition: opacity 0.2s linear;
+  background-size: contain;
+  background-repeat: no-repeat;
 }

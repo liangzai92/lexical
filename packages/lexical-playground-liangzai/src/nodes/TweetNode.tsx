@@ -1,11 +1,3 @@
-/**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
 import type {
   DOMConversionMap,
   DOMConversionOutput,
@@ -23,7 +15,6 @@ import {
   DecoratorBlockNode,
   SerializedDecoratorBlockNode,
 } from '@lexical/react/LexicalDecoratorBlockNode';
-import * as React from 'react';
 import {useCallback, useEffect, useRef, useState} from 'react';
 
 const WIDGET_SCRIPT_URL = 'https://platform.twitter.com/widgets.js';

@@ -1,11 +1,4 @@
-/**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
+import { createPortal } from 'react-dom';
 import * as React from 'react';
 import {
   ReactNode,
@@ -15,7 +8,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import {createPortal} from 'react-dom';
+import { DownOutlined } from '@ant-design/icons';
 
 type DropDownContextType = {
   registerItem: (ref: React.RefObject<HTMLButtonElement>) => void;
@@ -44,7 +37,7 @@ export function DropDownItem({
     throw new Error('DropDownItem must be used within a DropDown');
   }
 
-  const {registerItem} = dropDownContext;
+  const { registerItem } = dropDownContext;
 
   useEffect(() => {
     if (ref && ref.current) {
@@ -55,10 +48,11 @@ export function DropDownItem({
   return (
     <button
       className={className}
+      type="button"
+      title={title}
       onClick={onClick}
       ref={ref}
-      title={title}
-      type="button">
+    >
       {children}
     </button>
   );
@@ -149,6 +143,7 @@ export default function DropDown({
   buttonIconClassName,
   children,
   stopCloseOnClickSelf,
+  icon,
 }: {
   disabled?: boolean;
   buttonAriaLabel?: string;
@@ -157,6 +152,7 @@ export default function DropDown({
   buttonLabel?: string;
   children: ReactNode;
   stopCloseOnClickSelf?: boolean;
+  icon?: ReactNode | any;
 }): JSX.Element {
   const dropDownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -174,7 +170,7 @@ export default function DropDown({
     const dropDown = dropDownRef.current;
 
     if (showDropDown && button !== null && dropDown !== null) {
-      const {top, left} = button.getBoundingClientRect();
+      const { top, left } = button.getBoundingClientRect();
       dropDown.style.top = `${top + button.offsetHeight + dropDownPadding}px`;
       dropDown.style.left = `${Math.min(
         left,
@@ -215,7 +211,7 @@ export default function DropDown({
         const button = buttonRef.current;
         const dropDown = dropDownRef.current;
         if (button !== null && dropDown !== null) {
-          const {top} = button.getBoundingClientRect();
+          const { top } = button.getBoundingClientRect();
           const newPosition = top + button.offsetHeight + dropDownPadding;
           if (newPosition !== dropDown.getBoundingClientRect().top) {
             dropDown.style.top = `${newPosition}px`;
@@ -240,11 +236,12 @@ export default function DropDown({
         className={buttonClassName}
         onClick={() => setShowDropDown(!showDropDown)}
         ref={buttonRef}>
+        {icon && <span className="icon">{icon}</span>}
         {buttonIconClassName && <span className={buttonIconClassName} />}
         {buttonLabel && (
           <span className="text dropdown-button-text">{buttonLabel}</span>
         )}
-        <i className="chevron-down" />
+        <DownOutlined />
       </button>
 
       {showDropDown &&

@@ -1,16 +1,5 @@
-/**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
-import type {LexicalEditor} from 'lexical';
-
-import {Provider, TOGGLE_CONNECT_COMMAND} from '@lexical/yjs';
-import {COMMAND_PRIORITY_LOW} from 'lexical';
-import {useEffect, useState} from 'react';
+import type { LexicalEditor } from 'lexical';
+import { COMMAND_PRIORITY_LOW } from 'lexical';
 import {
   Array as YArray,
   Map as YMap,
@@ -18,6 +7,8 @@ import {
   YArrayEvent,
   YEvent,
 } from 'yjs';
+import { Provider, TOGGLE_CONNECT_COMMAND } from '@lexical/yjs';
+import { useEffect, useState } from 'react';
 
 export type Comment = {
   author: string;
@@ -170,7 +161,7 @@ export class CommentStore {
   deleteCommentOrThread(
     commentOrThread: Comment | Thread,
     thread?: Thread,
-  ): {markedComment: Comment; index: number} | null {
+  ): { markedComment: Comment; index: number } | null {
     const nextComments = Array.from(this._comments);
     // The YJS types explicitly use `any` as well.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -345,9 +336,9 @@ export class CommentStore {
                 target === sharedCommentsArray
                   ? undefined
                   : parent instanceof YMap &&
-                    (this._comments.find((t) => t.id === parent.get('id')) as
-                      | Thread
-                      | undefined);
+                  (this._comments.find((t) => t.id === parent.get('id')) as
+                    | Thread
+                    | undefined);
 
               if (Array.isArray(insert)) {
                 insert
@@ -361,34 +352,34 @@ export class CommentStore {
                     const commentOrThread =
                       type === 'thread'
                         ? createThread(
-                            map.get('quote'),
-                            map
-                              .get('comments')
-                              .toArray()
-                              .map(
-                                (
-                                  innerComment: Map<
-                                    string,
-                                    string | number | boolean
-                                  >,
-                                ) =>
-                                  createComment(
-                                    innerComment.get('content') as string,
-                                    innerComment.get('author') as string,
-                                    innerComment.get('id') as string,
-                                    innerComment.get('timeStamp') as number,
-                                    innerComment.get('deleted') as boolean,
-                                  ),
-                              ),
-                            id,
-                          )
+                          map.get('quote'),
+                          map
+                            .get('comments')
+                            .toArray()
+                            .map(
+                              (
+                                innerComment: Map<
+                                  string,
+                                  string | number | boolean
+                                >,
+                              ) =>
+                                createComment(
+                                  innerComment.get('content') as string,
+                                  innerComment.get('author') as string,
+                                  innerComment.get('id') as string,
+                                  innerComment.get('timeStamp') as number,
+                                  innerComment.get('deleted') as boolean,
+                                ),
+                            ),
+                          id,
+                        )
                         : createComment(
-                            map.get('content'),
-                            map.get('author'),
-                            id,
-                            map.get('timeStamp'),
-                            map.get('deleted'),
-                          );
+                          map.get('content'),
+                          map.get('author'),
+                          id,
+                          map.get('timeStamp'),
+                          map.get('deleted'),
+                        );
                     this._withLocalTransaction(() => {
                       this.addComment(
                         commentOrThread,

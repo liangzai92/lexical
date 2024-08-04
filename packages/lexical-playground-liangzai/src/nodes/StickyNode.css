@@ -1,37 +1,34 @@
-/**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- *
- */
+.StickyNode__contentEditable__wrapper {
+  position: relative;
+}
+
 .StickyNode__contentEditable {
   min-height: 20px;
   border: 0;
   resize: none;
   cursor: text;
-  font-size: 24px;
-  caret-color: rgb(5, 5, 5);
-  display: block;
-  position: relative;
   outline: 0;
-  padding: 10px;
+  position: relative;
+  padding: 0 15px;
+  caret-color: rgb(5, 5, 5);
   user-select: text;
   white-space: pre-wrap;
   word-wrap: break-word;
+  &::before,
+  &::after {
+    content: '';
+    display: table;
+    clear: 'both';
+  }
 }
 .StickyNode__placeholder {
-  font-size: 24px;
-  color: #999;
   overflow: hidden;
   position: absolute;
-  text-overflow: ellipsis;
-  top: 30px;
-  left: 20px;
-  width: 120px;
+  top: 0px;
+  left: 15px;
+  color: #999;
   user-select: none;
   white-space: nowrap;
-  display: inline-block;
+  text-overflow: ellipsis;
   pointer-events: none;
 }

@@ -1,11 +1,3 @@
-/**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
 import type { Provider } from '@lexical/yjs';
 import type {
   EditorState,
@@ -16,8 +8,6 @@ import type {
 } from 'lexical';
 import type { Doc } from 'yjs';
 
-import './index.css';
-
 import {
   $createMarkNode,
   $getMarkIDs,
@@ -26,16 +16,8 @@ import {
   $wrapSelectionInMarkNode,
   MarkNode,
 } from '@lexical/mark';
-import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
-import { ClearEditorPlugin } from '@lexical/react/LexicalClearEditorPlugin';
 import { useCollaborationContext } from '@lexical/react/LexicalCollaborationContext';
-import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { EditorRefPlugin } from '@lexical/react/LexicalEditorRefPlugin';
-import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
-import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
-import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
-import { PlainTextPlugin } from '@lexical/react/LexicalPlainTextPlugin';
 import { createDOMRange, createRectsFromDOMRange } from '@lexical/selection';
 import { $isRootTextContentEmpty, $rootTextContent } from '@lexical/text';
 import { mergeRegister, registerNestedElementResolver } from '@lexical/utils';
@@ -50,7 +32,6 @@ import {
   KEY_ESCAPE_COMMAND,
 } from 'lexical';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import * as React from 'react';
 import { createPortal } from 'react-dom';
 import useLayoutEffect from 'shared/useLayoutEffect';
 
@@ -64,9 +45,9 @@ import {
   useCommentStore,
 } from '../../commenting';
 import useModal from '../../hooks/useModal';
-import CommentEditorTheme from '../../themes/CommentEditorTheme';
 import Button from '../../ui/Button';
-import ContentEditable from '../../ui/ContentEditable';
+import PlainTextEditor from './PlainTextEditor';
+import './index.css';
 
 export const INSERT_INLINE_COMMAND: LexicalCommand<void> = createCommand(
   'INSERT_INLINE_COMMAND',
@@ -116,70 +97,6 @@ function AddCommentBox({
         <i className="icon add-comment" />
       </button>
     </div>
-  );
-}
-
-function EscapeHandlerPlugin({
-  onEscape,
-}: {
-  onEscape: (e: KeyboardEvent) => boolean;
-}): null {
-  const [editor] = useLexicalComposerContext();
-
-  useEffect(() => {
-    return editor.registerCommand(
-      KEY_ESCAPE_COMMAND,
-      (event: KeyboardEvent) => {
-        return onEscape(event);
-      },
-      2,
-    );
-  }, [editor, onEscape]);
-
-  return null;
-}
-
-function PlainTextEditor({
-  className,
-  autoFocus,
-  onEscape,
-  onChange,
-  editorRef,
-  placeholder = 'Type a comment...',
-}: {
-  autoFocus?: boolean;
-  className?: string;
-  editorRef?: { current: null | LexicalEditor };
-  onChange: (editorState: EditorState, editor: LexicalEditor) => void;
-  onEscape: (e: KeyboardEvent) => boolean;
-  placeholder?: string;
-}) {
-  const initialConfig = {
-    namespace: 'Commenting',
-    nodes: [],
-    onError: (error: Error) => {
-      throw error;
-    },
-    theme: CommentEditorTheme,
-  };
-
-  return (
-    <LexicalComposer initialConfig={initialConfig}>
-      <div className="CommentPlugin_CommentInputBox_EditorContainer">
-        <PlainTextPlugin
-          contentEditable={
-            <ContentEditable placeholder={placeholder} className={className} />
-          }
-          ErrorBoundary={LexicalErrorBoundary}
-        />
-        <OnChangePlugin onChange={onChange} />
-        <HistoryPlugin />
-        {autoFocus !== false && <AutoFocusPlugin />}
-        <EscapeHandlerPlugin onEscape={onEscape} />
-        <ClearEditorPlugin />
-        {editorRef !== undefined && <EditorRefPlugin editorRef={editorRef} />}
-      </div>
-    </LexicalComposer>
   );
 }
 
@@ -343,13 +260,13 @@ function CommentInputBox({
         <Button
           onClick={cancelAddComment}
           className="CommentPlugin_CommentInputBox_Button">
-          Cancel
+          取消
         </Button>
         <Button
           onClick={submitComment}
           disabled={!canSubmit}
           className="CommentPlugin_CommentInputBox_Button primary">
-          Comment
+          确认发送
         </Button>
       </div>
     </div>
@@ -389,16 +306,18 @@ function CommentsComposer({
 
   return (
     <>
-      <PlainTextEditor
-        className="CommentPlugin_CommentsPanel_Editor"
-        autoFocus={false}
-        onEscape={() => {
-          return true;
-        }}
-        onChange={onChange}
-        editorRef={editorRef}
-        placeholder={placeholder}
-      />
+      <div className="CommentPlugin_CommentInputBox_EditorContainer">
+        <PlainTextEditor
+          className="CommentPlugin_CommentsPanel_Editor"
+          autoFocus={false}
+          onEscape={() => {
+            return true;
+          }}
+          onChange={onChange}
+          editorRef={editorRef}
+          placeholder={placeholder}
+        />
+      </div>
       <Button
         className="CommentPlugin_CommentsPanel_SendButton"
         onClick={submitComment}
@@ -594,13 +513,13 @@ function CommentsPanelList({
                 } ${activeIDs.indexOf(id) === -1 ? '' : 'active'}`}>
               <div className="CommentPlugin_CommentsPanel_List_Thread_QuoteBox">
                 <blockquote className="CommentPlugin_CommentsPanel_List_Thread_Quote">
-                  {'> '}
                   <span>{commentOrThread.quote}</span>
                 </blockquote>
                 {/* INTRODUCE DELETE THREAD HERE*/}
                 <Button
+                  className="CommentPlugin_CommentsPanel_List_DeleteButton"
                   onClick={() => {
-                    showModal('Delete Thread', (onClose) => (
+                    showModal('删除同主题的评论', (onClose) => (
                       <ShowDeleteCommentOrThreadDialog
                         commentOrThread={commentOrThread}
                         deleteCommentOrThread={deleteCommentOrThread}
@@ -608,7 +527,7 @@ function CommentsPanelList({
                       />
                     ));
                   }}
-                  className="CommentPlugin_CommentsPanel_List_DeleteButton">
+                >
                   <i className="delete" />
                 </Button>
                 {modal}
@@ -672,19 +591,21 @@ function CommentsPanel({
 
   return (
     <div className="CommentPlugin_CommentsPanel">
-      <h2 className="CommentPlugin_CommentsPanel_Heading">评论列表</h2>
-      {isEmpty ? (
-        <div className="CommentPlugin_CommentsPanel_Empty">暂无评论</div>
-      ) : (
-        <CommentsPanelList
-          activeIDs={activeIDs}
-          comments={comments}
-          deleteCommentOrThread={deleteCommentOrThread}
-          listRef={listRef}
-          submitAddComment={submitAddComment}
-          markNodeMap={markNodeMap}
-        />
-      )}
+      <h3 className="CommentPlugin_CommentsPanel_Heading">笔记和评论</h3>
+      <div className='panel-body'>
+        {isEmpty ? (
+          <div className="CommentPlugin_CommentsPanel_Empty">暂无</div>
+        ) : (
+          <CommentsPanelList
+            activeIDs={activeIDs}
+            comments={comments}
+            deleteCommentOrThread={deleteCommentOrThread}
+            listRef={listRef}
+            submitAddComment={submitAddComment}
+            markNodeMap={markNodeMap}
+          />
+        )}
+      </div>
     </div>
   );
 }
@@ -692,7 +613,7 @@ function CommentsPanel({
 function useCollabAuthorName(): string {
   const collabContext = useCollaborationContext();
   const { yjsDocMap, name } = collabContext;
-  return yjsDocMap.has('comments') ? name : 'Playground User';
+  return yjsDocMap.has('comments') ? name : '游客';
 }
 
 export default function CommentPlugin({

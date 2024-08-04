@@ -1,11 +1,3 @@
-/**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
 import type { LexicalEditor } from 'lexical';
 
 import { $createCodeNode, $isCodeNode } from '@lexical/code';
@@ -214,7 +206,7 @@ export default function ActionsPlugin(): JSX.Element {
         onClick={() =>
           exportFile(editor, {
             fileName: `Playground ${new Date().toISOString()}`,
-            source: 'Playground',
+            source: 'rich-text.adebibi.com',
           })
         }
         title="Export"
@@ -227,7 +219,7 @@ export default function ActionsPlugin(): JSX.Element {
         onClick={() =>
           shareDoc(
             serializedDocumentFromEditorState(editor.getEditorState(), {
-              source: 'Playground',
+              source: 'rich-text.adebibi.com',
             }),
           ).then(
             () => showFlashMessage('URL copied to clipboard'),

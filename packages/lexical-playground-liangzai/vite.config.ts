@@ -1,17 +1,9 @@
-/**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
 import babel from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
 import react from '@vitejs/plugin-react';
-import {createRequire} from 'node:module';
-import {defineConfig} from 'vite';
-import {replaceCodePlugin} from 'vite-plugin-replace';
+import { createRequire } from 'node:module';
+import { defineConfig } from 'vite';
+import { replaceCodePlugin } from 'vite-plugin-replace';
 
 import moduleResolution from '../shared/viteModuleResolution';
 import viteCopyEsm from './viteCopyEsm';
@@ -19,7 +11,7 @@ import viteCopyEsm from './viteCopyEsm';
 const require = createRequire(import.meta.url);
 
 // https://vitejs.dev/config/
-export default defineConfig(({command}) => {
+export default defineConfig(({ command }) => {
   return {
     build: {
       outDir: 'build',
@@ -69,7 +61,7 @@ export default defineConfig(({command}) => {
             },
           ],
         ],
-        presets: [['@babel/preset-react', {runtime: 'automatic'}]],
+        presets: [['@babel/preset-react', { runtime: 'automatic' }]],
       }),
       react(),
       viteCopyEsm(),

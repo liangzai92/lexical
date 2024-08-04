@@ -1,8 +1,8 @@
 import { $createLinkNode } from '@lexical/link';
 import { $createListItemNode, $createListNode } from '@lexical/list';
-import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { $createHeadingNode, $createQuoteNode } from '@lexical/rich-text';
 import { $createParagraphNode, $createTextNode, $getRoot } from 'lexical';
+import { LexicalComposer } from '@lexical/react/LexicalComposer';
 
 import { isDevPlayground } from './appSettings';
 import { FlashMessageContext } from './context/FlashMessageContext';
@@ -17,10 +17,6 @@ import TestRecorderPlugin from './plugins/TestRecorderPlugin';
 import TypingPerfPlugin from './plugins/TypingPerfPlugin';
 import Settings from './Settings';
 import PlaygroundEditorTheme from './themes/PlaygroundEditorTheme';
-
-console.warn(
-  'If you are profiling the playground app, please ensure you turn off the debug view. You can disable it by pressing on the settings control in the bottom-left of your screen and toggling the debug view setting.',
-);
 
 function $prepopulatedRichText() {
   const root = $getRoot();

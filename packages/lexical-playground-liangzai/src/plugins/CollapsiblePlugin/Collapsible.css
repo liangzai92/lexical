@@ -1,26 +1,20 @@
-/**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- *
- */
-
 .Collapsible__container {
-  background: #fcfcfc;
+  margin: 1em 0;
+  border-radius: 6px;
   border: 1px solid #eee;
-  border-radius: 10px;
-  margin-bottom: 8px;
+  background: #fcfcfc;
 }
 
 .Collapsible__title {
-  cursor: pointer;
-  padding: 5px 5px 5px 20px;
-  position: relative;
-  font-weight: bold;
   list-style: none;
   outline: none;
+  cursor: pointer;
+  position: relative;
+  padding-left: 25px;
+}
+
+.Collapsible__content {
+  padding-left: 25px; /* 同 title */
 }
 
 .Collapsible__title::marker,
@@ -29,26 +23,22 @@
 }
 
 .Collapsible__title:before {
+  display: block;
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
   border-style: solid;
   border-color: transparent;
   border-width: 4px 6px 4px 6px;
   border-left-color: #000;
-  display: block;
-  content: '';
-  position: absolute;
-  left: 7px;
-  top: 50%;
-  transform: translateY(-50%);
 }
 
 .Collapsible__container[open] > .Collapsible__title:before {
   border-color: transparent;
   border-width: 6px 4px 0 4px;
   border-top-color: #000;
-}
-
-.Collapsible__content {
-  padding: 0 5px 5px 20px;
 }
 
 .Collapsible__collapsed .Collapsible__content {

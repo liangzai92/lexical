@@ -13,8 +13,8 @@ import {
   $isLinkNode,
   TOGGLE_LINK_COMMAND,
 } from '@lexical/link';
-import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
-import {$findMatchingParent, mergeRegister} from '@lexical/utils';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { $findMatchingParent, mergeRegister } from '@lexical/utils';
 import {
   $getSelection,
   $isLineBreakNode,
@@ -28,13 +28,14 @@ import {
   LexicalEditor,
   SELECTION_CHANGE_COMMAND,
 } from 'lexical';
-import {Dispatch, useCallback, useEffect, useRef, useState} from 'react';
+import { Dispatch, useCallback, useEffect, useRef, useState } from 'react';
 import * as React from 'react';
-import {createPortal} from 'react-dom';
+import { createPortal } from 'react-dom';
 
-import {getSelectedNode} from '../../utils/getSelectedNode';
-import {setFloatingElemPositionForLinkEditor} from '../../utils/setFloatingElemPositionForLinkEditor';
-import {sanitizeUrl} from '../../utils/url';
+import { getSelectedNode } from '../../utils/getSelectedNode';
+import { setFloatingElemPositionForLinkEditor } from '../../utils/setFloatingElemPositionForLinkEditor';
+import { sanitizeUrl } from '../../utils/url';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 function FloatingLinkEditor({
   editor,
@@ -138,7 +139,7 @@ function FloatingLinkEditor({
 
   useEffect(() => {
     return mergeRegister(
-      editor.registerUpdateListener(({editorState}) => {
+      editor.registerUpdateListener(({ editorState }) => {
         editorState.read(() => {
           $updateLinkEditor();
         });
@@ -217,19 +218,23 @@ function FloatingLinkEditor({
   return (
     <div ref={editorRef} className="link-editor">
       {!isLink ? null : isLinkEditMode ? (
-        <>
-          <input
-            ref={inputRef}
-            className="link-input"
-            value={editedLinkUrl}
-            onChange={(event) => {
-              setEditedLinkUrl(event.target.value);
-            }}
-            onKeyDown={(event) => {
-              monitorInputInteraction(event);
-            }}
-          />
-          <div>
+        <div className='link-edit-form'>
+          <div className='form-items'>
+            <div className='form-item-input'>
+              <input
+                ref={inputRef}
+                className="link-input"
+                value={editedLinkUrl}
+                onChange={(event) => {
+                  setEditedLinkUrl(event.target.value);
+                }}
+                onKeyDown={(event) => {
+                  monitorInputInteraction(event);
+                }}
+              />
+            </div>
+          </div>
+          <div className='form-actions'>
             <div
               className="link-cancel"
               role="button"
@@ -248,7 +253,7 @@ function FloatingLinkEditor({
               onClick={handleLinkSubmission}
             />
           </div>
-        </>
+        </div>
       ) : (
         <div className="link-view">
           <a
@@ -266,7 +271,9 @@ function FloatingLinkEditor({
               setEditedLinkUrl(linkUrl);
               setIsLinkEditMode(true);
             }}
-          />
+          >
+            <EditOutlined />
+          </div>
           <div
             className="link-trash"
             role="button"
@@ -275,7 +282,9 @@ function FloatingLinkEditor({
             onClick={() => {
               editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
             }}
-          />
+          >
+            <DeleteOutlined />
+          </div>
         </div>
       )}
     </div>
@@ -328,7 +337,7 @@ function useFloatingLinkEditorToolbar(
       }
     }
     return mergeRegister(
-      editor.registerUpdateListener(({editorState}) => {
+      editor.registerUpdateListener(({ editorState }) => {
         editorState.read(() => {
           $updateToolbar();
         });

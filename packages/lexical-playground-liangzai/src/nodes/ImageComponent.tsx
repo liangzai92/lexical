@@ -15,19 +15,19 @@ import type {
 
 import './ImageNode.css';
 
-import {HashtagNode} from '@lexical/hashtag';
-import {LinkNode} from '@lexical/link';
-import {AutoFocusPlugin} from '@lexical/react/LexicalAutoFocusPlugin';
-import {useCollaborationContext} from '@lexical/react/LexicalCollaborationContext';
-import {CollaborationPlugin} from '@lexical/react/LexicalCollaborationPlugin';
-import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
-import {LexicalErrorBoundary} from '@lexical/react/LexicalErrorBoundary';
-import {HashtagPlugin} from '@lexical/react/LexicalHashtagPlugin';
-import {HistoryPlugin} from '@lexical/react/LexicalHistoryPlugin';
-import {LexicalNestedComposer} from '@lexical/react/LexicalNestedComposer';
-import {RichTextPlugin} from '@lexical/react/LexicalRichTextPlugin';
-import {useLexicalNodeSelection} from '@lexical/react/useLexicalNodeSelection';
-import {mergeRegister} from '@lexical/utils';
+import { HashtagNode } from '@lexical/hashtag';
+import { LinkNode } from '@lexical/link';
+import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
+import { useCollaborationContext } from '@lexical/react/LexicalCollaborationContext';
+import { CollaborationPlugin } from '@lexical/react/LexicalCollaborationPlugin';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
+import { HashtagPlugin } from '@lexical/react/LexicalHashtagPlugin';
+import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
+import { LexicalNestedComposer } from '@lexical/react/LexicalNestedComposer';
+import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
+import { useLexicalNodeSelection } from '@lexical/react/useLexicalNodeSelection';
+import { mergeRegister } from '@lexical/utils';
 import {
   $getNodeByKey,
   $getSelection,
@@ -49,11 +49,11 @@ import {
   TextNode,
 } from 'lexical';
 import * as React from 'react';
-import {Suspense, useCallback, useEffect, useRef, useState} from 'react';
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 
-import {createWebsocketProvider} from '../collaboration';
-import {useSettings} from '../context/SettingsContext';
-import {useSharedHistoryContext} from '../context/SharedHistoryContext';
+import { createWebsocketProvider } from '../collaboration';
+import { useSettings } from '../context/SettingsContext';
+import { useSharedHistoryContext } from '../context/SharedHistoryContext';
 import brokenImage from '../images/image-broken.svg';
 import EmojisPlugin from '../plugins/EmojisPlugin';
 import KeywordsPlugin from '../plugins/KeywordsPlugin';
@@ -62,9 +62,9 @@ import MentionsPlugin from '../plugins/MentionsPlugin';
 import TreeViewPlugin from '../plugins/TreeViewPlugin';
 import ContentEditable from '../ui/ContentEditable';
 import ImageResizer from '../ui/ImageResizer';
-import {EmojiNode} from './EmojiNode';
-import {$isImageNode} from './ImageNode';
-import {KeywordNode} from './KeywordNode';
+import { EmojiNode } from './EmojiNode';
+import { $isImageNode } from './ImageNode';
+import { KeywordNode } from './KeywordNode';
 
 const imageCache = new Set();
 
@@ -100,7 +100,7 @@ function LazyImage({
   altText: string;
   className: string | null;
   height: 'inherit' | number;
-  imageRef: {current: null | HTMLImageElement};
+  imageRef: { current: null | HTMLImageElement };
   maxWidth: number;
   src: string;
   width: 'inherit' | number;
@@ -166,7 +166,7 @@ export default function ImageComponent({
   const [isSelected, setSelected, clearSelection] =
     useLexicalNodeSelection(nodeKey);
   const [isResizing, setIsResizing] = useState<boolean>(false);
-  const {isCollabActive} = useCollaborationContext();
+  const { isCollabActive } = useCollaborationContext();
   const [editor] = useLexicalComposerContext();
   const [selection, setSelection] = useState<BaseSelection | null>(null);
   const activeEditorRef = useRef<LexicalEditor | null>(null);
@@ -284,7 +284,7 @@ export default function ImageComponent({
     let isMounted = true;
     const rootElement = editor.getRootElement();
     const unregister = mergeRegister(
-      editor.registerUpdateListener(({editorState}) => {
+      editor.registerUpdateListener(({ editorState }) => {
         if (isMounted) {
           setSelection(editorState.read(() => $getSelection()));
         }
@@ -389,7 +389,7 @@ export default function ImageComponent({
     setIsResizing(true);
   };
 
-  const {historyState} = useSharedHistoryContext();
+  const { historyState } = useSharedHistoryContext();
 
   const draggable = isSelected && $isNodeSelection(selection) && !isResizing;
   const isFocused = isSelected || isResizing;
@@ -449,9 +449,8 @@ export default function ImageComponent({
               <RichTextPlugin
                 contentEditable={
                   <ContentEditable
-                    placeholder="Enter a caption..."
-                    placeholderClassName="ImageNode__placeholder"
                     className="ImageNode__contentEditable"
+                    placeholder="Enter a caption..."
                   />
                 }
                 ErrorBoundary={LexicalErrorBoundary}

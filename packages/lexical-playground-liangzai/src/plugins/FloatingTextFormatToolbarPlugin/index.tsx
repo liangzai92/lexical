@@ -1,17 +1,7 @@
-/**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
-import './index.css';
-
-import {$isCodeHighlightNode} from '@lexical/code';
-import {$isLinkNode, TOGGLE_LINK_COMMAND} from '@lexical/link';
-import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
-import {mergeRegister} from '@lexical/utils';
+import { $isCodeHighlightNode } from '@lexical/code';
+import { $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { mergeRegister } from '@lexical/utils';
 import {
   $getSelection,
   $isParagraphNode,
@@ -22,14 +12,17 @@ import {
   LexicalEditor,
   SELECTION_CHANGE_COMMAND,
 } from 'lexical';
-import {Dispatch, useCallback, useEffect, useRef, useState} from 'react';
-import * as React from 'react';
-import {createPortal} from 'react-dom';
 
-import {getDOMRangeRect} from '../../utils/getDOMRangeRect';
-import {getSelectedNode} from '../../utils/getSelectedNode';
-import {setFloatingElemPosition} from '../../utils/setFloatingElemPosition';
-import {INSERT_INLINE_COMMAND} from '../CommentPlugin';
+import { Dispatch, useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { BoldOutlined, ItalicOutlined, LinkOutlined, StrikethroughOutlined, UnderlineOutlined } from "@ant-design/icons";
+
+import { getDOMRangeRect } from '../../utils/getDOMRangeRect';
+import { getSelectedNode } from '../../utils/getSelectedNode';
+import { setFloatingElemPosition } from '../../utils/setFloatingElemPosition';
+import { INSERT_INLINE_COMMAND } from '../CommentPlugin';
+
+import './index.css';
 
 function TextFormatFloatingToolbar({
   editor,
@@ -165,7 +158,7 @@ function TextFormatFloatingToolbar({
       $updateTextFormatFloatingToolbar();
     });
     return mergeRegister(
-      editor.registerUpdateListener(({editorState}) => {
+      editor.registerUpdateListener(({ editorState }) => {
         editorState.read(() => {
           $updateTextFormatFloatingToolbar();
         });
@@ -193,7 +186,7 @@ function TextFormatFloatingToolbar({
             }}
             className={'popup-item spaced ' + (isBold ? 'active' : '')}
             aria-label="Format text as bold">
-            <i className="format bold" />
+            <BoldOutlined />
           </button>
           <button
             type="button"
@@ -202,7 +195,7 @@ function TextFormatFloatingToolbar({
             }}
             className={'popup-item spaced ' + (isItalic ? 'active' : '')}
             aria-label="Format text as italics">
-            <i className="format italic" />
+            <ItalicOutlined />
           </button>
           <button
             type="button"
@@ -211,16 +204,17 @@ function TextFormatFloatingToolbar({
             }}
             className={'popup-item spaced ' + (isUnderline ? 'active' : '')}
             aria-label="Format text to underlined">
-            <i className="format underline" />
+            <UnderlineOutlined />
           </button>
           <button
             type="button"
+            className={'popup-item spaced ' + (isStrikethrough ? 'active' : '')}
+            aria-label="Format text with a strikethrough"
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough');
             }}
-            className={'popup-item spaced ' + (isStrikethrough ? 'active' : '')}
-            aria-label="Format text with a strikethrough">
-            <i className="format strikethrough" />
+          >
+            <StrikethroughOutlined />
           </button>
           <button
             type="button"
@@ -256,7 +250,7 @@ function TextFormatFloatingToolbar({
             onClick={insertLink}
             className={'popup-item spaced ' + (isLink ? 'active' : '')}
             aria-label="Insert link">
-            <i className="format link" />
+            <LinkOutlined />
           </button>
         </>
       )}

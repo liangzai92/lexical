@@ -1,16 +1,8 @@
-/**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
-import {createHeadlessEditor} from '@lexical/headless';
-import {$isMarkNode, $unwrapMarkNode} from '@lexical/mark';
 import * as http from 'http';
-import {$getRoot, $isElementNode, LexicalNode} from 'lexical';
 import * as url from 'url';
+import { createHeadlessEditor } from '@lexical/headless';
+import { $isMarkNode, $unwrapMarkNode } from '@lexical/mark';
+import { $getRoot, $isElementNode, LexicalNode } from 'lexical';
 
 import PlaygroundNodes from '../nodes/PlaygroundNodes';
 
@@ -91,7 +83,7 @@ const validateEditorState = async (
 
 const server = http.createServer(async (req, res) => {
   const pathname = url.parse(req.url!).pathname;
-  const {method} = req;
+  const { method } = req;
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Request-Method', '*');
