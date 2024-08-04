@@ -33,9 +33,11 @@ export function useDecorators(
   // Subscribe to changes
   useLayoutEffect(() => {
     return editor.registerDecoratorListener<JSX.Element>((nextDecorators) => {
-      flushSync(() => {
-        setDecorators(nextDecorators);
-      });
+      Promise.resolve().then(() => {
+        flushSync(() => {
+          setDecorators(nextDecorators);
+        });
+      })
     });
   }, [editor]);
 
