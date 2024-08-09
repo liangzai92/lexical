@@ -9,7 +9,6 @@ const syncSerializedDocumentToLocalStorage = (editor: any) => {
   })
   localStorage.setItem('lexical-document', JSON.stringify(doc));
 }
-
 const throttledSyncSerializedDocumentToLocalStorage = throttle(syncSerializedDocumentToLocalStorage, 5000)
 
 export const useLocalSync = () => {
@@ -17,21 +16,21 @@ export const useLocalSync = () => {
 
   useEffect(() => {
     if (!editor) return
-    const text = localStorage.getItem('lexical-document') || ''
-    if (!text || !text.trim()) {
+    const jsonString = localStorage.getItem('lexical-document') || ''
+    if (!jsonString || !jsonString.trim()) {
       return
     }
-    const editorState = editorStateFromSerializedDocument(editor, text);
+    const editorState = editorStateFromSerializedDocument(editor, jsonString);
     editor.setEditorState(editorState);
   }, [editor])
 
-  useEffect(() => {
-    if (!editor) return
-    const unregisterListener = editor.registerUpdateListener(({ editorState }) => {
-      throttledSyncSerializedDocumentToLocalStorage(editor);
-    });
-    return () => {
-      unregisterListener();
-    }
-  }, [editor]);
+  // useEffect(() => {
+  //   if (!editor) return
+  //   const unregisterListener = editor.registerUpdateListener(({ editorState }) => {
+  //     throttledSyncSerializedDocumentToLocalStorage(editor);
+  //   });
+  //   return () => {
+  //     unregisterListener();
+  //   }
+  // }, [editor]);
 }

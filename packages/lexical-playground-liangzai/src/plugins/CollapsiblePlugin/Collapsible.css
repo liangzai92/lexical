@@ -11,10 +11,12 @@
   cursor: pointer;
   position: relative;
   padding-left: 25px;
+  padding-right: 15px;
 }
 
 .Collapsible__content {
   padding-left: 25px; /* 同 title */
+  padding-right: 15px;
 }
 
 .Collapsible__title::marker,

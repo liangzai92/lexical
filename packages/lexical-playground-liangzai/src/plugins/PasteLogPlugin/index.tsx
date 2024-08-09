@@ -41,10 +41,10 @@ export default function PasteLogPlugin(): JSX.Element {
       <button
         id="paste-log-button"
         className={`editor-dev-button ${isActive ? 'active' : ''}`}
+        title={isActive ? 'Disable paste log' : 'Enable paste log'}
         onClick={() => {
           setIsActive(!isActive);
         }}
-        title={isActive ? 'Disable paste log' : 'Enable paste log'}
       />
       {isActive && lastClipboardData !== null ? (
         <pre>{lastClipboardData}</pre>

@@ -434,7 +434,9 @@ export function useCommentStore(commentStore: CommentStore): Comments {
 
   useEffect(() => {
     return commentStore.registerOnChange(() => {
-      setComments(commentStore.getComments());
+      const comments = commentStore.getComments();
+      localStorage.setItem('comments', JSON.stringify(comments));
+      setComments(comments);
     });
   }, [commentStore]);
 

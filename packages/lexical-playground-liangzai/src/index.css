@@ -1,10 +1,12 @@
 :root {
+  font-family: 'Trebuchet MS', Arial, sans-serif;
   --bg-color__active: rgba(0, 145, 255, 0.5);
   --bg-color__hover: rgba(0, 145, 255, 0.15);
   --border-color: rgba(0, 0, 0, 0.05);
   --outline-color_focus: rgb(66, 135, 245);
   --shadow-island: 0px 0px 1px 0px rgba(0, 0, 0, 0.3),
     0px 0px 3px 0px rgba(0, 0, 0, 0.2), 0px 7px 14px 0px rgba(0, 0, 0, 0.1);
+  --blockquote-bg-color: rgba(0, 145, 255, 0.05);
 }
 
 body {
@@ -22,6 +24,21 @@ body {
     padding: 0;
     cursor: pointer;
     border: none;
+  }
+
+  code {
+    font-size: 94%;
+    font-family: monospace, Monaco, Menlo, Consolas;
+  }
+
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type='number'] {
+    -moz-appearance: textfield;
   }
 }
 
@@ -66,7 +83,7 @@ body {
 
   &:focus {
     /* 禁用默认样式 */
-    outline: none;  
+    outline: none;
     /* background-color: #f0f8ff; */
   }
 }
@@ -252,7 +269,7 @@ pre::-webkit-scrollbar-thumb {
 
 #paste-log-button {
   position: fixed;
-  left: 120px;
+  left: 80px;
   bottom: 20px;
 }
 
@@ -1565,13 +1582,13 @@ button.toolbar-item.active i {
 
 .sticky-note .delete {
   border: 0;
-  background: none;
   position: absolute;
   top: 8px;
   right: 10px;
+  background: none;
   font-size: 10px;
-  cursor: pointer;
   opacity: 0.5;
+  cursor: pointer;
 }
 
 .sticky-note .delete:hover {

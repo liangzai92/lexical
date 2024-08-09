@@ -59,11 +59,8 @@ import ToolbarPlugin from './plugins/ToolbarPlugin';
 import TwitterPlugin from './plugins/TwitterPlugin';
 import YouTubePlugin from './plugins/YouTubePlugin';
 import ContentEditable from './ui/ContentEditable';
-import { useLocalSync } from './useLocalSync';
-
-const skipCollaborationInit =
-  // @ts-expect-error
-  window.parent != null && window.parent.frames.right === window;
+import { useTextContentSize } from './useTextContentSize';
+import { useHotkeys } from './useHotkeys';
 
 export default function Editor(): JSX.Element {
   const { historyState } = useSharedHistoryContext();
@@ -113,7 +110,9 @@ export default function Editor(): JSX.Element {
     };
   }, [isSmallWidthViewport]);
 
-  useLocalSync()
+  // useLocalSync()
+  useHotkeys()
+  const { textContentSize } = useTextContentSize()
 
   return (
     <>
@@ -144,7 +143,7 @@ export default function Editor(): JSX.Element {
               <CollaborationPlugin
                 id="main"
                 providerFactory={createWebsocketProvider}
-                shouldBootstrap={!skipCollaborationInit}
+                shouldBootstrap={false}
               />
             ) : (
               <HistoryPlugin externalHistoryState={historyState} />
@@ -217,7 +216,7 @@ export default function Editor(): JSX.Element {
       </div>
       <div className='bottom-row max-container'>
         <div className='text-count'>
-          字数
+          Text：{textContentSize}
         </div>
         <ActionsPlugin />
       </div>

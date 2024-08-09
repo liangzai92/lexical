@@ -129,25 +129,10 @@ i.add-comment {
   right: 5px;
 }
 
-i.comments {
-  display: inline-block;
-  height: 16px;
-  width: 16px;
-  vertical-align: -10px;
-  background-image: url(../../images/icons/comments.svg);
-  background-size: contain;
-  transition: opacity 0.2s linear;
-  opacity: 0.5;
-}
-
 @media (max-width: 1024px) {
   .CommentPlugin_ShowCommentsButton {
     display: none;
   }
-}
-
-.CommentPlugin_ShowCommentsButton:hover i.comments {
-  opacity: 1;
 }
 
 .CommentPlugin_ShowCommentsButton.active {
@@ -300,7 +285,7 @@ i.send {
 }
 
 .CommentPlugin_CommentsPanel_List_Thread.interactive:hover {
-  background-color: rgba(255, 212, 0, 0.1);
+  /* background-color: rgba(255, 212, 0, 0.1); */
 }
 
 .CommentPlugin_CommentsPanel_List_Thread.active {

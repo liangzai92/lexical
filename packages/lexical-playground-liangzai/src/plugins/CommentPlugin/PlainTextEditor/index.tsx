@@ -1,10 +1,7 @@
 import {
   KEY_ESCAPE_COMMAND,
   type EditorState,
-  type LexicalCommand,
   type LexicalEditor,
-  type NodeKey,
-  type RangeSelection,
 } from 'lexical';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
@@ -15,10 +12,9 @@ import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { PlainTextPlugin } from '@lexical/react/LexicalPlainTextPlugin';
+import { useEffect } from 'react';
 import CommentEditorTheme from '../../../themes/CommentEditorTheme';
 import ContentEditable from '../../../ui/ContentEditable';
-
-import { useEffect } from 'react';
 import './index.css';
 
 function EscapeHandlerPlugin({

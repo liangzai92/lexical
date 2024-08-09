@@ -12,7 +12,7 @@
   border: 1px dashed var(--bg-color__active);
   border-left: 0;
   border-right: 0;
-  background-color: var(--bg-color__hover);
+  background-color: var(--blockquote-bg-color);
 }
 .PlaygroundEditorTheme__h1 {
   // font-size: 2em;
@@ -72,7 +72,7 @@
   padding: 8px 8px 8px 50px;
   border-radius: 6px;
   background-color: rgb(247 251 255);
-  font-size: 12px;
+  font-size: 85%;
   line-height: 1.53;
   font-family: monospace, Monaco, Menlo, Consolas;
   tab-size: 2;
@@ -96,8 +96,8 @@
   overflow-y: scroll;
   overflow-x: scroll;
   table-layout: fixed;
+  margin: 1em 25px 30px 0px;
   width: max-content;
-  margin: 0px 25px 30px 0px;
 }
 .PlaygroundEditorTheme__tableSelection *::selection {
   background-color: transparent;
@@ -246,9 +246,8 @@
   background-color: #ffbbbb !important;
 }
 .PlaygroundEditorTheme__ol1 {
-  padding: 0;
-  margin: 0;
   list-style-position: outside;
+  padding: 0;
 }
 .PlaygroundEditorTheme__ol2 {
   padding: 0;
@@ -287,7 +286,7 @@
   outline: none;
   position: relative;
   margin-left: 8px;
-  padding-left: 24px;
+  padding-left: 25px;
 }
 .PlaygroundEditorTheme__listItemChecked {
   text-decoration: line-through;

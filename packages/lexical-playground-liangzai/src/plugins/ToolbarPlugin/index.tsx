@@ -126,11 +126,11 @@ function getCodeLanguageOptions(): [string, string][] {
 const CODE_LANGUAGE_OPTIONS = getCodeLanguageOptions();
 
 const FONT_FAMILY_OPTIONS: [string, string][] = [
+  ['Trebuchet MS', 'Trebuchet MS'],
   ['Times New Roman', 'Times New Roman'],
   ['cursive', 'Cursive'],
   ['Arial', 'Arial'],
   ['Courier New', 'Courier New'],
-  ['Trebuchet MS', 'Trebuchet MS'],
   ['Verdana', 'Verdana'],
   ['monospace', 'Monospace'],
 ];
@@ -500,10 +500,10 @@ export default function ToolbarPlugin({
   const [selectedElementKey, setSelectedElementKey] = useState<NodeKey | null>(
     null,
   );
-  const [fontSize, setFontSize] = useState<string>('15px');
+  const [fontSize, setFontSize] = useState<string>('14px');
   const [fontColor, setFontColor] = useState<string>('#000');
   const [bgColor, setBgColor] = useState<string>('#fff');
-  const [fontFamily, setFontFamily] = useState<string>('Times New Roman');
+  const [fontFamily, setFontFamily] = useState<string>('Trebuchet MS');
   const [elementFormat, setElementFormat] = useState<ElementFormatType>('left');
   const [isLink, setIsLink] = useState(false);
   const [isBold, setIsBold] = useState(false);
@@ -617,7 +617,7 @@ export default function ToolbarPlugin({
         ),
       );
       setFontFamily(
-        $getSelectionStyleValueForProperty(selection, 'font-family', 'Times New Roman'),
+        $getSelectionStyleValueForProperty(selection, 'font-family', 'Trebuchet MS'),
       );
       let matchingParent;
       if ($isLinkNode(parent)) {
@@ -639,7 +639,7 @@ export default function ToolbarPlugin({
     }
     if ($isRangeSelection(selection) || $isTableSelection(selection)) {
       setFontSize(
-        $getSelectionStyleValueForProperty(selection, 'font-size', '15px'),
+        $getSelectionStyleValueForProperty(selection, 'font-size', '14px'),
       );
     }
   }, [activeEditor, editor]);

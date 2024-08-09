@@ -28,6 +28,7 @@ import { useSharedHistoryContext } from '../context/SharedHistoryContext';
 import StickyEditorTheme from '../themes/StickyEditorTheme';
 import ContentEditable from '../ui/ContentEditable';
 import { $isStickyNode } from './StickyNode';
+import { DeleteOutlined } from '@ant-design/icons';
 
 type Positioning = {
   isDragging: boolean;
@@ -230,7 +231,7 @@ export default function StickyComponent({
           className="delete"
           aria-label="Delete sticky note"
           title="Delete">
-          X
+          <DeleteOutlined />
         </button>
         <button
           onClick={handleColorChange}

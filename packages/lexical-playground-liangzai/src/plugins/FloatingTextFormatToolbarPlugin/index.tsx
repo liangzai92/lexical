@@ -12,16 +12,13 @@ import {
   LexicalEditor,
   SELECTION_CHANGE_COMMAND,
 } from 'lexical';
-
 import { Dispatch, useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { BoldOutlined, ItalicOutlined, LinkOutlined, StrikethroughOutlined, UnderlineOutlined } from "@ant-design/icons";
-
 import { getDOMRangeRect } from '../../utils/getDOMRangeRect';
 import { getSelectedNode } from '../../utils/getSelectedNode';
 import { setFloatingElemPosition } from '../../utils/setFloatingElemPosition';
 import { INSERT_INLINE_COMMAND } from '../CommentPlugin';
-
 import './index.css';
 
 function TextFormatFloatingToolbar({

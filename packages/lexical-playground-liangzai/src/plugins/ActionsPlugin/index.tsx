@@ -205,7 +205,7 @@ export default function ActionsPlugin(): JSX.Element {
         className="action-button export"
         onClick={() =>
           exportFile(editor, {
-            fileName: `Playground ${new Date().toISOString()}`,
+            fileName: `adebibi_editor ${new Date().toISOString()}`,
             source: 'rich-text.adebibi.com',
           })
         }
