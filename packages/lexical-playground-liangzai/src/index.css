@@ -1,5 +1,4 @@
 :root {
-  font-family: 'Trebuchet MS', Arial, sans-serif;
   --bg-color__active: rgba(0, 145, 255, 0.5);
   --bg-color__hover: rgba(0, 145, 255, 0.15);
   --border-color: rgba(0, 0, 0, 0.05);
@@ -40,6 +39,19 @@ body {
   input[type='number'] {
     -moz-appearance: textfield;
   }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  ul,
+  ol,
+  blockquote {
+    margin: 0.6em 0;
+  }
 }
 
 #root {
@@ -51,9 +63,16 @@ body {
   min-height: 100%;
   color: #0a1e2f;
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.5;
   display: flex;
-  flex-direction: column;
+  .left-col {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .right-col {
+    flex-grow: 0;
+  }
 }
 
 .editor {
@@ -1426,8 +1445,8 @@ button.toolbar-item {
   font-size: inherit;
   cursor: pointer;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: center;
 }
 
 button.toolbar-item:disabled {
@@ -1476,22 +1495,35 @@ button.toolbar-item.active i {
 
 .toolbar .toolbar-item .text {
   overflow: hidden;
-  padding-right: 10px;
+  margin: 0 6px;
+  text-align: left;
+  vertical-align: middle;
   text-overflow: ellipsis;
   white-space: nowrap;
-  vertical-align: middle;
-  text-align: left;
   display: flex;
 }
 
 .toolbar .toolbar-item .icon {
-  margin-right: 6px;
   width: 14px;
   height: 14px;
   background-size: contain;
   background-repeat: no-repeat;
   user-select: none;
   display: flex;
+  .icon-wrapper {
+    position: relative;
+    .indicator {
+      position: absolute;
+      left: 50%;
+      bottom: 0px;
+      transform: translate3d(-50%, 0, 0);
+      box-sizing: border-box;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      width: 120%;
+      height: 5px;
+      border-radius: 4px;
+    }
+  }
 }
 
 .toolbar i.chevron-down,
@@ -1716,4 +1748,5 @@ button.item.dropdown-item-active i {
 
 .text-count {
   font-size: 12px;
+  text-align: right;
 }

@@ -11,6 +11,7 @@ type Props = {
   stopCloseOnClickSelf?: boolean;
   color: string;
   icon?: any;
+  showDropDownIndicator?: boolean;
   onChange?: (color: string, skipHistoryStack: boolean) => void;
 };
 

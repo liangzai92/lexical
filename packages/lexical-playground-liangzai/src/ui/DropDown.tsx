@@ -144,6 +144,7 @@ export default function DropDown({
   children,
   stopCloseOnClickSelf,
   icon,
+  showDropDownIndicator = true,
 }: {
   disabled?: boolean;
   buttonAriaLabel?: string;
@@ -153,6 +154,7 @@ export default function DropDown({
   children: ReactNode;
   stopCloseOnClickSelf?: boolean;
   icon?: ReactNode | any;
+  showDropDownIndicator?: boolean;
 }): JSX.Element {
   const dropDownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -241,7 +243,7 @@ export default function DropDown({
         {buttonLabel && (
           <span className="text dropdown-button-text">{buttonLabel}</span>
         )}
-        <DownOutlined />
+        {showDropDownIndicator && <DownOutlined />}
       </button>
 
       {showDropDown &&

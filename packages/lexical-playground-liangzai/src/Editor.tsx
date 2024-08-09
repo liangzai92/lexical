@@ -61,6 +61,7 @@ import YouTubePlugin from './plugins/YouTubePlugin';
 import ContentEditable from './ui/ContentEditable';
 import { useTextContentSize } from './useTextContentSize';
 import { useHotkeys } from './useHotkeys';
+import { useSmallWidthViewport } from './useSmallWidthViewport';
 
 export default function Editor(): JSX.Element {
   const { historyState } = useSharedHistoryContext();
@@ -78,148 +79,129 @@ export default function Editor(): JSX.Element {
     },
   } = useSettings();
   const isEditable = useLexicalEditable();
-  const placeholder = isCollab
-    ? '请开始你的协作输入'
-    : '请开始你的输入'
-  const [floatingAnchorElem, setFloatingAnchorElem] =
-    useState<HTMLDivElement | null>(null);
-  const [isSmallWidthViewport, setIsSmallWidthViewport] =
-    useState<boolean>(false);
   const [isLinkEditMode, setIsLinkEditMode] = useState<boolean>(false);
+  const isSmallWidthViewport = useSmallWidthViewport();
+  const { textContentSize } = useTextContentSize()
+  useHotkeys()
 
+  const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | null>(null);
   const onRef = (_floatingAnchorElem: HTMLDivElement) => {
     if (_floatingAnchorElem !== null) {
       setFloatingAnchorElem(_floatingAnchorElem);
     }
   };
 
-  useEffect(() => {
-    const updateViewPortWidth = () => {
-      const isNextSmallWidthViewport =
-        CAN_USE_DOM && window.matchMedia('(max-width: 1025px)').matches;
-
-      if (isNextSmallWidthViewport !== isSmallWidthViewport) {
-        setIsSmallWidthViewport(isNextSmallWidthViewport);
-      }
-    };
-    updateViewPortWidth();
-    window.addEventListener('resize', updateViewPortWidth);
-
-    return () => {
-      window.removeEventListener('resize', updateViewPortWidth);
-    };
-  }, [isSmallWidthViewport]);
-
-  // useLocalSync()
-  useHotkeys()
-  const { textContentSize } = useTextContentSize()
-
+  const placeholder = isCollab ? '请开始你的协作输入' : '请开始你的输入'
   return (
-    <>
-      {isEditable && <div className='top-row max-container'>
-        <ToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />
-      </div>}
-      <div className='main-row'>
-        <div className="content-wrapper">
-          {isMaxLength && <MaxLengthPlugin maxLength={100000} />}
-          <DragDropPaste />
-          <AutoFocusPlugin />
-          <ClearEditorPlugin />
-          <ComponentPickerPlugin />
-          <EmojiPickerPlugin />
-          <AutoEmbedPlugin />
+    <div className="editor-shell">
+      <div className='left-col'>
+        {isEditable && <div className='top-row max-container'>
+          <ToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />
+        </div>}
+        <div className='main-row'>
+          <div className="content-wrapper">
+            {isMaxLength && <MaxLengthPlugin maxLength={100000} />}
+            <DragDropPaste />
+            <AutoFocusPlugin />
+            <ClearEditorPlugin />
+            <ComponentPickerPlugin />
+            <EmojiPickerPlugin />
+            <AutoEmbedPlugin />
 
-          <MentionsPlugin />
-          <EmojisPlugin />
-          <HashtagPlugin />
-          <KeywordsPlugin />
-          <SpeechToTextPlugin />
-          <AutoLinkPlugin />
-          <CommentPlugin
-            providerFactory={isCollab ? createWebsocketProvider : undefined}
-          />
-          <>
-            {isCollab ? (
-              <CollaborationPlugin
-                id="main"
-                providerFactory={createWebsocketProvider}
-                shouldBootstrap={false}
+            <MentionsPlugin />
+            <EmojisPlugin />
+            <HashtagPlugin />
+            <KeywordsPlugin />
+            <SpeechToTextPlugin />
+            <AutoLinkPlugin />
+            <CommentPlugin
+              providerFactory={isCollab ? createWebsocketProvider : undefined}
+            />
+            <>
+              {isCollab ? (
+                <CollaborationPlugin
+                  id="main"
+                  providerFactory={createWebsocketProvider}
+                  shouldBootstrap={false}
+                />
+              ) : (
+                <HistoryPlugin externalHistoryState={historyState} />
+              )}
+              <RichTextPlugin
+                contentEditable={
+                  <div className="editor" ref={onRef}>
+                    <ContentEditable placeholder={placeholder} />
+                  </div>
+                }
+                ErrorBoundary={LexicalErrorBoundary}
               />
-            ) : (
-              <HistoryPlugin externalHistoryState={historyState} />
+              <MarkdownShortcutPlugin />
+              <CodeHighlightPlugin />
+              <ListPlugin />
+              <CheckListPlugin />
+              <ListMaxIndentLevelPlugin maxDepth={7} />
+              <TablePlugin
+                hasCellMerge={tableCellMerge}
+                hasCellBackgroundColor={tableCellBackgroundColor}
+              />
+              <TableCellResizer />
+              <TableHoverActionsPlugin />
+              <ImagesPlugin />
+              <InlineImagePlugin />
+              <LinkPlugin />
+              <PollPlugin />
+              <TwitterPlugin />
+              <YouTubePlugin />
+              <FigmaPlugin />
+              <ClickableLinkPlugin disabled={isEditable} />
+              <HorizontalRulePlugin />
+              <EquationsPlugin />
+              <ExcalidrawPlugin />
+              <TabFocusPlugin />
+              <TabIndentationPlugin />
+              <CollapsiblePlugin />
+              <PageBreakPlugin />
+              <LayoutPlugin />
+              {floatingAnchorElem && !isSmallWidthViewport && (
+                <>
+                  <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
+                  <CodeActionMenuPlugin anchorElem={floatingAnchorElem} />
+                  <FloatingLinkEditorPlugin
+                    anchorElem={floatingAnchorElem}
+                    isLinkEditMode={isLinkEditMode}
+                    setIsLinkEditMode={setIsLinkEditMode}
+                  />
+                  <TableCellActionMenuPlugin
+                    anchorElem={floatingAnchorElem}
+                    cellMerge={true}
+                  />
+                  <FloatingTextFormatToolbarPlugin
+                    anchorElem={floatingAnchorElem}
+                    setIsLinkEditMode={setIsLinkEditMode}
+                  />
+                </>
+              )}
+            </>
+            {(isCharLimit || isCharLimitUtf8) && (
+              <CharacterLimitPlugin
+                charset={isCharLimit ? 'UTF-16' : 'UTF-8'}
+                maxLength={5}
+              />
             )}
-            <RichTextPlugin
-              contentEditable={
-                <div className="editor" ref={onRef}>
-                  <ContentEditable placeholder={placeholder} />
-                </div>
-              }
-              ErrorBoundary={LexicalErrorBoundary}
-            />
-            <MarkdownShortcutPlugin />
-            <CodeHighlightPlugin />
-            <ListPlugin />
-            <CheckListPlugin />
-            <ListMaxIndentLevelPlugin maxDepth={7} />
-            <TablePlugin
-              hasCellMerge={tableCellMerge}
-              hasCellBackgroundColor={tableCellBackgroundColor}
-            />
-            <TableCellResizer />
-            <TableHoverActionsPlugin />
-            <ImagesPlugin />
-            <InlineImagePlugin />
-            <LinkPlugin />
-            <PollPlugin />
-            <TwitterPlugin />
-            <YouTubePlugin />
-            <FigmaPlugin />
-            <ClickableLinkPlugin disabled={isEditable} />
-            <HorizontalRulePlugin />
-            <EquationsPlugin />
-            <ExcalidrawPlugin />
-            <TabFocusPlugin />
-            <TabIndentationPlugin />
-            <CollapsiblePlugin />
-            <PageBreakPlugin />
-            <LayoutPlugin />
-            {floatingAnchorElem && !isSmallWidthViewport && (
-              <>
-                <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
-                <CodeActionMenuPlugin anchorElem={floatingAnchorElem} />
-                <FloatingLinkEditorPlugin
-                  anchorElem={floatingAnchorElem}
-                  isLinkEditMode={isLinkEditMode}
-                  setIsLinkEditMode={setIsLinkEditMode}
-                />
-                <TableCellActionMenuPlugin
-                  anchorElem={floatingAnchorElem}
-                  cellMerge={true}
-                />
-                <FloatingTextFormatToolbarPlugin
-                  anchorElem={floatingAnchorElem}
-                  setIsLinkEditMode={setIsLinkEditMode}
-                />
-              </>
-            )}
-          </>
-          {(isCharLimit || isCharLimitUtf8) && (
-            <CharacterLimitPlugin
-              charset={isCharLimit ? 'UTF-16' : 'UTF-8'}
-              maxLength={5}
-            />
-          )}
-          {isAutocomplete && <AutocompletePlugin />}
-          {shouldUseLexicalContextMenu && <ContextMenuPlugin />}
-          <div className='toc-col'>{showTableOfContents && <TableOfContentsPlugin />}</div>
+            {isAutocomplete && <AutocompletePlugin />}
+            {shouldUseLexicalContextMenu && <ContextMenuPlugin />}
+          </div>
+        </div>
+        <div className='bottom-row max-container'>
+          <ActionsPlugin />
+          <div className='text-count'>
+            Text：{textContentSize}
+          </div>
         </div>
       </div>
-      <div className='bottom-row max-container'>
-        <div className='text-count'>
-          Text：{textContentSize}
-        </div>
-        <ActionsPlugin />
+      <div className='right-col'>
+        <div className='toc-col'>{showTableOfContents && <TableOfContentsPlugin />}</div>
       </div>
-    </>
+    </div>
   );
 }

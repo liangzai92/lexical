@@ -16,7 +16,7 @@ import { editorStateFromSerializedDocument } from '@lexical/file';
 
 function App(): JSX.Element {
   const {
-    settings: { measureTypingPerf },
+    settings: { measureTypingPerf, isCollab },
   } = useSettings();
 
   const getInitialConfig = () => {
@@ -29,18 +29,21 @@ function App(): JSX.Element {
       },
       theme: PlaygroundEditorTheme,
     };
-    initialConfig.editorState = null // 
-    // initialConfig.editorState = $prepopulatedRichText;
-    // 这个参数可以是个回调，里面异步与否就随便搞了
-    // initialConfig.editorState = (editor: any) => {
-    //   // 从localStorage中获取文档
-    //   const jsonString = localStorage.getItem('lexical-document') || ''
-    //   if (jsonString || jsonString.trim()) {
-    //     const editorState = editorStateFromSerializedDocument(editor, jsonString);
-    //     editor.setEditorState(editorState);
-    //   }
-    //   // fetchRemoteDoc()
-    // };
+    if (isCollab) {
+      initialConfig.editorState = null // 
+    } else {
+      // initialConfig.editorState = $prepopulatedRichText;
+      // 这个参数可以是个回调，里面异步与否就随便搞了
+      initialConfig.editorState = (editor: any) => {
+        // 从localStorage中获取文档
+        const jsonString = localStorage.getItem('lexical-document') || ''
+        if (jsonString || jsonString.trim()) {
+          const editorState = editorStateFromSerializedDocument(editor, jsonString);
+          editor.setEditorState(editorState);
+        }
+        // fetchRemoteDoc()
+      };
+    }
     return initialConfig;
   }
   const initialConfig = getInitialConfig(); // 只有初始化的时候 非响应式 因为只在mounted的时候初始化执行一次 具体可以看LexicalComposer组件的实现
@@ -50,9 +53,7 @@ function App(): JSX.Element {
       <SharedHistoryContext>
         <TableContext>
           <SharedAutocompleteContext>
-            <div className="editor-shell">
-              <Editor />
-            </div>
+            <Editor />
             <Settings />
             {isDevPlayground ? <PasteLogPlugin /> : null}
             {measureTypingPerf ? <TypingPerfPlugin /> : null}

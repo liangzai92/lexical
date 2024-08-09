@@ -77,6 +77,7 @@ export default function AutocompletePlugin(): JSX.Element | null {
     let lastMatch: null | string = null;
     let lastSuggestion: null | string = null;
     let searchPromise: null | SearchPromise = null;
+
     function $clearSuggestion() {
       const autocompleteNode =
         autocompleteNodeKey !== null
@@ -94,6 +95,7 @@ export default function AutocompletePlugin(): JSX.Element | null {
       lastSuggestion = null;
       setSuggestion(null);
     }
+    
     function updateAsyncSuggestion(
       refSearchPromise: SearchPromise,
       newSuggestion: null | string,
@@ -133,7 +135,7 @@ export default function AutocompletePlugin(): JSX.Element | null {
         $clearSuggestion();
       }
     }
-    function handleUpdate() {
+    function uppdateListener() {
       editor.update(() => {
         const selection = $getSelection();
         const [hasMatch, match] = $search(selection);
@@ -199,7 +201,7 @@ export default function AutocompletePlugin(): JSX.Element | null {
         AutocompleteNode,
         $handleAutocompleteNodeTransform,
       ),
-      editor.registerUpdateListener(handleUpdate),
+      editor.registerUpdateListener(uppdateListener),
       editor.registerCommand(
         KEY_TAB_COMMAND,
         $handleKeypressCommand,

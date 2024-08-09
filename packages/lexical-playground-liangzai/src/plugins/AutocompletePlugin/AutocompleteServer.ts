@@ -15,6 +15,7 @@ export class AutocompleteServer {
     const dismiss = () => {
       isDismissed = true;
     };
+    
     const promise: Promise<null | string> = new Promise((resolve, reject) => {
       setTimeout(() => {
         if (isDismissed) {

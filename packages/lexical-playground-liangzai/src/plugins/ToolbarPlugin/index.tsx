@@ -125,15 +125,19 @@ function getCodeLanguageOptions(): [string, string][] {
 
 const CODE_LANGUAGE_OPTIONS = getCodeLanguageOptions();
 
-const FONT_FAMILY_OPTIONS: [string, string][] = [
-  ['Trebuchet MS', 'Trebuchet MS'],
-  ['Times New Roman', 'Times New Roman'],
-  ['cursive', 'Cursive'],
-  ['Arial', 'Arial'],
-  ['Courier New', 'Courier New'],
-  ['Verdana', 'Verdana'],
-  ['monospace', 'Monospace'],
-];
+const FONT_FAMILY_MAP: any = {
+  '': '默认/无',
+  'Trebuchet MS': 'Trebuchet MS',
+  'Times New Roman': 'Times New Roman',
+  cursive: 'Cursive',
+  Arial: 'Arial',
+  'Courier New': 'Courier New',
+  Verdana: 'Verdana',
+  monospace: 'Monospace',
+}
+const FONT_FAMILY_OPTIONS: [string, string][] = Object.keys(FONT_FAMILY_MAP).map((key) => {
+  return [key, FONT_FAMILY_MAP[key]]
+})
 
 const ELEMENT_FORMAT_OPTIONS: {
   [key in Exclude<ElementFormatType, ''>]: {
@@ -365,22 +369,22 @@ function FontDropDown({
     <DropDown
       disabled={disabled}
       buttonClassName={'toolbar-item font-family'}
-      buttonLabel={value}
+      buttonLabel={FONT_FAMILY_MAP[value]}
       buttonIconClassName="icon block-type font-family"
       buttonAriaLabel={buttonAriaLabel}>
       {FONT_FAMILY_OPTIONS.map(
-        ([option, text]) => (
-          <DropDownItem
+        ([option, text]) => {
+          return <DropDownItem
             className={`item ${dropDownActiveClass(value === option)}`}
             onClick={() => handleClick(option)}
             key={option}>
             <span style={{
-              fontFamily: text,
+              fontFamily: option,
             }}>
               <span className="text">{text}</span>
             </span>
           </DropDownItem>
-        ),
+        }
       )}
     </DropDown>
   );
@@ -503,7 +507,7 @@ export default function ToolbarPlugin({
   const [fontSize, setFontSize] = useState<string>('14px');
   const [fontColor, setFontColor] = useState<string>('#000');
   const [bgColor, setBgColor] = useState<string>('#fff');
-  const [fontFamily, setFontFamily] = useState<string>('Trebuchet MS');
+  const [fontFamily, setFontFamily] = useState<string>('');
   const [elementFormat, setElementFormat] = useState<ElementFormatType>('left');
   const [isLink, setIsLink] = useState(false);
   const [isBold, setIsBold] = useState(false);
@@ -617,7 +621,7 @@ export default function ToolbarPlugin({
         ),
       );
       setFontFamily(
-        $getSelectionStyleValueForProperty(selection, 'font-family', 'Trebuchet MS'),
+        $getSelectionStyleValueForProperty(selection, 'font-family', ''),
       );
       let matchingParent;
       if ($isLinkNode(parent)) {
@@ -965,19 +969,31 @@ export default function ToolbarPlugin({
             disabled={!isEditable}
             buttonClassName="toolbar-item color-picker"
             buttonAriaLabel="Formatting text color"
-            icon={<FontColorsOutlined />}
+            icon={<span className='icon-wrapper'>
+              <FontColorsOutlined />
+              <span className='indicator' style={{
+                backgroundColor: fontColor,
+              }}></span>
+            </span>}
             color={fontColor}
             onChange={onFontColorSelect}
             title="text color"
+            showDropDownIndicator={false}
           />
           <DropdownColorPicker
             disabled={!isEditable}
             buttonClassName="toolbar-item color-picker"
             buttonAriaLabel="Formatting background color"
-            icon={<BgColorsOutlined />}
+            icon={<span className='icon-wrapper'>
+              <BgColorsOutlined />
+              <span className='indicator' style={{
+                backgroundColor: bgColor,
+              }}></span>
+            </span>}
             color={bgColor}
             onChange={onBgColorSelect}
             title="bg color"
+            showDropDownIndicator={false}
           />
           <DropDown
             disabled={!isEditable}

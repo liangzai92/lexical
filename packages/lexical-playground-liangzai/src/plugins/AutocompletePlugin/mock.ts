@@ -1,6 +1,6 @@
 // https://raw.githubusercontent.com/first20hours/google-10000-english/master/google-10000-english-usa-no-swears-long.txt
 export const DICTIONARY = [
-  'rick and morty',
+  'Rick and Morty',
   'kubernetes',
   'constructor',
   'information',
