@@ -3,12 +3,8 @@
   height: 100%;
 }
 
-.ContentEditable__root {
-  border: 0;
-  outline: 0;
-  position: relative;
-  box-sizing: border-box;
-  padding: 0 15px;
+[data-lexical-editor][contenteditable].ContentEditable__root {
+  padding: 0 30px;
   min-height: 100%;
 }
 
@@ -17,6 +13,6 @@
   user-select: none;
   position: absolute;
   top: 0;
-  padding-left: 15px;
+  padding-left: 30px;
   color: rgba(0, 0, 0, 0.3);
 }

@@ -126,7 +126,7 @@ i.add-comment {
   z-index: 2;
   position: fixed;
   top: 5px;
-  right: 5px;
+  right: 15px;
 }
 
 @media (max-width: 1024px) {
@@ -144,9 +144,8 @@ i.add-comment {
   position: fixed;
   top: 0px;
   right: 0;
-  width: 300px;
   height: calc(100%);
-  border-top-left-radius: 10px;
+  width: 300px;
   box-shadow: -1px 0 12px rgba(0, 0, 0, 0.1);
   background-color: #fff;
   font-size: 12px;

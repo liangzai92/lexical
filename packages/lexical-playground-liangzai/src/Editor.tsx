@@ -95,8 +95,13 @@ export default function Editor(): JSX.Element {
   return (
     <div className="editor-shell">
       <div className='left-col'>
-        {isEditable && <div className='top-row max-container'>
-          <ToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />
+        文件目录树结构
+      </div>
+      <div className='middle-col'>
+        {isEditable && <div className='top-row'>
+          <div className='max-container'>
+            <ToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />
+          </div>
         </div>}
         <div className='main-row'>
           <div className="content-wrapper">
@@ -192,16 +197,20 @@ export default function Editor(): JSX.Element {
             {shouldUseLexicalContextMenu && <ContextMenuPlugin />}
           </div>
         </div>
-        <div className='bottom-row max-container'>
-          <ActionsPlugin />
-          <div className='text-count'>
-            Text：{textContentSize}
+        <div className='bottom-row'>
+          <div className='max-container'>
+            <div className='more-action-row'>
+              <ActionsPlugin />
+              <div className='text-count'>
+                Text：{textContentSize}
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div className='right-col'>
-        <div className='toc-col'>{showTableOfContents && <TableOfContentsPlugin />}</div>
-      </div>
+      {showTableOfContents && <div className='right-col'>
+        <TableOfContentsPlugin />
+      </div>}
     </div>
   );
 }

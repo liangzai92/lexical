@@ -29,6 +29,7 @@
     "@lexical/selection": "0.17.0",
     "@lexical/table": "0.17.0",
     "@lexical/utils": "0.17.0",
+    "classnames": "^2.5.1",
     "katex": "^0.16.10",
     "lexical": "0.17.0",
     "lodash-es": "^4.17.21",

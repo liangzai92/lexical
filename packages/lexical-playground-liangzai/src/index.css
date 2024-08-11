@@ -3,8 +3,8 @@
   --bg-color__hover: rgba(0, 145, 255, 0.15);
   --border-color: rgba(0, 0, 0, 0.05);
   --outline-color_focus: rgb(66, 135, 245);
-  --shadow-island: 0px 0px 1px 0px rgba(0, 0, 0, 0.3),
-    0px 0px 3px 0px rgba(0, 0, 0, 0.2), 0px 7px 14px 0px rgba(0, 0, 0, 0.1);
+  --shadow-island: 0px 0px 1px 0px rgba(0, 0, 0, 0.2),
+    0px 0px 1px 0px rgba(0, 0, 0, 0.1), 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
   --blockquote-bg-color: rgba(0, 145, 255, 0.05);
 }
 
@@ -66,12 +66,29 @@ body {
   line-height: 1.5;
   display: flex;
   .left-col {
+    flex-grow: 0;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0px;
+    border-right: 1px solid var(--border-color);
+    height: 100vh;
+    max-width: 300px;
+    min-width: 180px;
+  }
+  .middle-col {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
   }
   .right-col {
     flex-grow: 0;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0px;
+    border-left: 1px solid var(--border-color);
+    height: 100vh;
+    max-width: 300px;
+    min-width: 180px;
   }
 }
 
@@ -85,6 +102,10 @@ body {
 ** ! import 所有编辑器 非常非常重要
  */
 [data-lexical-editor][contenteditable] {
+  outline: 0;
+  position: relative;
+  box-sizing: border-box;
+  border: 0;
   padding: 0 15px;
   caret-color: rgb(5, 5, 5);
   /**
@@ -118,12 +139,11 @@ body {
   z-index: 1;
   position: sticky;
   top: 0;
-  width: 100%;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid var(--border-color);
   background-image: linear-gradient(
     180deg,
     #fff,
-    white 70%,
+    white 80%,
     rgba(255, 255, 255, 0.9)
   );
 }
@@ -147,19 +167,14 @@ body {
   flex-shrink: 0;
   position: sticky;
   bottom: 0;
-  width: 100%;
   border-top: 1px solid var(--border-color);
   background-color: #fff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
-
-.toc-col {
-  flex-grow: 0;
-  flex-shrink: 0;
-  position: sticky;
-  top: 0px;
+.more-action-row {
+  margin: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .test-recorder-output {
@@ -1230,10 +1245,6 @@ i.page-break,
   font-weight: bold;
 }
 
-.actions {
-  padding: 3px;
-}
-
 .actions i {
   background-size: contain;
   display: inline-block;
@@ -1311,12 +1322,11 @@ i.page-break,
 }
 
 .action-button {
-  display: inline-block;
   position: relative;
-  margin-left: 5px;
-  padding: 4px 6px;
+  margin-right: 5px;
   border-radius: 4px;
   border: 0;
+  padding: 4px 6px;
   background-color: white;
   color: black;
   cursor: pointer;
@@ -1429,7 +1439,7 @@ button.action-button:disabled {
 
 .toolbar {
   overflow-x: auto;
-  padding: 4px;
+  margin: 4px;
   font-size: 12px;
   display: flex;
   align-items: center;
@@ -1747,6 +1757,7 @@ button.item.dropdown-item-active i {
 }
 
 .text-count {
+  margin-right: 5px;
   font-size: 12px;
   text-align: right;
 }

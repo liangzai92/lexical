@@ -1,10 +1,10 @@
 .draggable-block-menu {
   cursor: grab;
   position: absolute;
-  top: -1px;
-  left: -10px;
-  padding: 2px 1px;
+  top: 0px;
+  left: 0px;
   border-radius: 4px;
+  padding: 2px;
   will-change: transform;
   opacity: 0;
 }
