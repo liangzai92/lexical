@@ -66,12 +66,10 @@
 .PlaygroundEditorTheme__code {
   overflow-x: auto;
   position: relative;
-  margin: 0;
-  margin-top: 8px;
-  margin-bottom: 8px;
+  margin-top: 8px 0;
   padding: 8px 8px 8px 50px;
   border-radius: 6px;
-  background-color: rgb(247 251 255);
+  background-color: rgba(0, 0, 0, 0.03);
   font-size: 85%;
   line-height: 1.53;
   font-family: monospace, Monaco, Menlo, Consolas;

@@ -1,150 +1,65 @@
-import type { TableOfContentsEntry } from '@lexical/react/LexicalTableOfContentsPlugin';
-import type { HeadingTagType } from '@lexical/rich-text';
-import type { NodeKey } from 'lexical';
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { TableOfContentsPlugin as LexicalTableOfContentsPlugin } from '@lexical/react/LexicalTableOfContentsPlugin';
-import { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames'
+import { TableOfContentsPlugin as LexicalTableOfContentsPlugin } from '@lexical/react/LexicalTableOfContentsPlugin';
+import useConnectContentAndHeadingWhenScroll from './useConnectContentAndHeadingWhenScroll';
+import { useEffect, useMemo, useRef } from 'react';
 import './index.css';
 
-const MARGIN_ABOVE_EDITOR = 624;
-const HEADING_WIDTH = 9;
-
-function indent(tagName: HeadingTagType) {
-  if (tagName === 'h2') {
-    return 'heading2';
-  } else if (tagName === 'h3') {
-    return 'heading3';
-  }
-}
-
-function isHeadingAtTheTopOfThePage(element: HTMLElement): boolean {
-  const elementYPosition = element?.getClientRects()[0].y;
-  return (
-    elementYPosition >= MARGIN_ABOVE_EDITOR &&
-    elementYPosition <= MARGIN_ABOVE_EDITOR + HEADING_WIDTH
-  );
-}
-function isHeadingAboveViewport(element: HTMLElement): boolean {
-  const elementYPosition = element?.getClientRects()[0].y;
-  return elementYPosition < MARGIN_ABOVE_EDITOR;
-}
-function isHeadingBelowTheTopOfThePage(element: HTMLElement): boolean {
-  const elementYPosition = element?.getClientRects()[0].y;
-  return elementYPosition >= MARGIN_ABOVE_EDITOR + HEADING_WIDTH;
-}
-
-function TableOfContentsList({
-  tableOfContents,
+export function TableOfContentsList({
+  contentHeadingList,
 }: {
-  tableOfContents: Array<TableOfContentsEntry>;
+  contentHeadingList: Array<any>;
 }): JSX.Element {
-  const [selectedKey, setSelectedKey] = useState('');
-  const selectedIndex = useRef(0);
-  const [editor] = useLexicalComposerContext();
-
-  function scrollToNode(key: NodeKey, currIndex: number) {
-    editor.getEditorState().read(() => {
-      const domElement = editor.getElementByKey(key);
-      if (domElement !== null) {
-        domElement.scrollIntoView();
-        setSelectedKey(key);
-        selectedIndex.current = currIndex;
-      }
-    });
-  }
+  const { selectedNode, scrollToNode } = useConnectContentAndHeadingWhenScroll({ contentHeadingList: contentHeadingList });
+  const itemsRef = useRef<HTMLLIElement[]>([]);
+  const scrollContainerRef = useRef<HTMLDivElement | any>(null);
 
   useEffect(() => {
-    function scrollCallback() {
-      if (
-        tableOfContents.length !== 0 &&
-        selectedIndex.current < tableOfContents.length - 1
-      ) {
-        let currentHeading = editor.getElementByKey(
-          tableOfContents[selectedIndex.current][0],
-        );
-        if (currentHeading !== null) {
-          if (isHeadingBelowTheTopOfThePage(currentHeading)) {
-            //On natural scroll, user is scrolling up
-            while (
-              currentHeading !== null &&
-              isHeadingBelowTheTopOfThePage(currentHeading) &&
-              selectedIndex.current > 0
-            ) {
-              const prevHeading = editor.getElementByKey(
-                tableOfContents[selectedIndex.current - 1][0],
-              );
-              if (
-                prevHeading !== null &&
-                (isHeadingAboveViewport(prevHeading) ||
-                  isHeadingBelowTheTopOfThePage(prevHeading))
-              ) {
-                selectedIndex.current--;
-              }
-              currentHeading = prevHeading;
-            }
-            const prevHeadingKey = tableOfContents[selectedIndex.current][0];
-            setSelectedKey(prevHeadingKey);
-          } else if (isHeadingAboveViewport(currentHeading)) {
-            //On natural scroll, user is scrolling down
-            while (
-              currentHeading !== null &&
-              isHeadingAboveViewport(currentHeading) &&
-              selectedIndex.current < tableOfContents.length - 1
-            ) {
-              const nextHeading = editor.getElementByKey(
-                tableOfContents[selectedIndex.current + 1][0],
-              );
-              if (
-                nextHeading !== null &&
-                (isHeadingAtTheTopOfThePage(nextHeading) ||
-                  isHeadingAboveViewport(nextHeading))
-              ) {
-                selectedIndex.current++;
-              }
-              currentHeading = nextHeading;
-            }
-            const nextHeadingKey = tableOfContents[selectedIndex.current][0];
-            setSelectedKey(nextHeadingKey);
-          }
-        }
-      } else {
-        selectedIndex.current = 0;
-      }
+    if (!selectedNode) {
+      return
     }
-    let timerId: ReturnType<typeof setTimeout>;
-
-    function debounceFunction(func: () => void, delay: number) {
-      clearTimeout(timerId);
-      timerId = setTimeout(func, delay);
+    const el = itemsRef.current[selectedNode.index];
+    if (!el) {
+      return
     }
-
-    function onScroll(): void {
-      debounceFunction(scrollCallback, 10);
+    const elementRect = el.getBoundingClientRect();
+    const containerRect = scrollContainerRef.current.getBoundingClientRect();
+    if ((elementRect.top > containerRect.top) && elementRect.top < (containerRect.top + containerRect.height)) {
+      // console.log('in view')
+    } else if (elementRect.top > (containerRect.top + containerRect.height)) {
+      // 在容器 下外面
+      const delta = elementRect.top - (containerRect.top + containerRect.height)
+      scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollTop + delta + elementRect.height;
+    } else {
+      // 在容器 上外面
+      const delta = containerRect.top - elementRect.top
+      scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollTop - delta;
     }
-
-    document.addEventListener('scroll', onScroll);
-    return () => document.removeEventListener('scroll', onScroll);
-  }, [tableOfContents, editor]);
+  }, [selectedNode?.key])
 
   const List = () => {
+    if (!contentHeadingList.length || !selectedNode) {
+      return null
+    }
     return <ul className="heading-list">
-      {tableOfContents.map(([key, text, tag], index) => {
+      {contentHeadingList.map((node, index) => {
         return (
           <li
-            key={key}
-            className={classNames('heading-wrapper', {
-              'selected': selectedKey === key,
-              [`heading-${tag}`]: true,
+            key={node.key}
+            className={classNames('heading-item', {
+              'selected': selectedNode.key === node.key,
+              [`heading-${node.tag}`]: true,
             })}
+            ref={(el) => {
+              itemsRef.current[index] = el as HTMLLIElement;
+            }}
           >
             <div
-              className='heading-text'
-              onClick={() => scrollToNode(key, index)}
               role="button"
+              className='heading-text'
               tabIndex={0}
+              onClick={() => scrollToNode(node)}
             >
-              {text}
+              {node.text}
             </div>
           </li>
         );
@@ -153,8 +68,8 @@ function TableOfContentsList({
   }
 
   return (
-    <div className="table-of-contents">
-      <List />
+    <div className="table-of-contents" ref={scrollContainerRef}>
+      {contentHeadingList.length > 0 && <List />}
     </div>
   );
 }
@@ -163,7 +78,10 @@ export default function TableOfContentsPlugin() {
   return (
     <LexicalTableOfContentsPlugin>
       {(tableOfContents) => {
-        return <TableOfContentsList tableOfContents={tableOfContents} />;
+        const contentHeadingList = tableOfContents.map(([key, text, tag], index) => {
+          return { key, text, tag, index }
+        })
+        return <TableOfContentsList contentHeadingList={contentHeadingList} />;
       }}
     </LexicalTableOfContentsPlugin>
   );

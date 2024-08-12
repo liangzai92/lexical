@@ -92,6 +92,22 @@ body {
   }
 }
 
+.left-toggle-btn {
+  z-index: 1;
+  position: fixed;
+  top: 30px;
+  left: 0;
+  border-radius: 0 8px 8px 0;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  background-color: var(--bg-color__hover);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .editor {
   flex-grow: 1;
   position: relative;
@@ -1439,7 +1455,8 @@ button.action-button:disabled {
 
 .toolbar {
   overflow-x: auto;
-  margin: 4px;
+  box-sizing: border-box;
+  padding: 4px;
   font-size: 12px;
   display: flex;
   align-items: center;
