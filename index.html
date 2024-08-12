@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClientRects vs BoundingClientRect</title>
+    <style>
+      .rect {
+        position: absolute;
+        border: 1px solid red;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <span id="example">
+    
+        333 This is a sample text that spans multiple lines to demonstrate the
+        difference between getClientRects and getBoundingClientRect.
+    </span>
+
+    <script>
+      const element = document.getElementById('example');
+
+      // getClientRects
+      const clientRects = element.getClientRects();
+      console.log('ClientRects:', clientRects);
+
+      // getBoundingClientRect
+      const boundingClientRect = element.getBoundingClientRect();
+      console.log('BoundingClientRect:', boundingClientRect);
+
+      // Function to draw rectangles
+      function drawRect(rect, className) {
+        const div = document.createElement('div');
+        div.className = `rect ${className}`;
+        div.style.left = `${rect.left + window.scrollX}px`;
+        div.style.top = `${rect.top + window.scrollY}px`;
+        div.style.width = `${rect.width}px`;
+        div.style.height = `${rect.height}px`;
+        document.body.appendChild(div);
+      }
+
+      for (let i = 0; i < clientRects.length; i++) {
+        drawRect(clientRects[i], '');
+      }
+
+      // Draw bounding client rect
+      drawRect(boundingClientRect, 'bounding-rect');
+    </script>
+  </body>
+</html>
