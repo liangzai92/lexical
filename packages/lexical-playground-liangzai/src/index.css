@@ -1,5 +1,6 @@
 :root {
-  --bg-color__active: rgba(0, 145, 255, 0.5);
+  --primary__color: #0969da;
+  --bg-color__active: rgba(9, 105, 218, 0.5);
   --bg-color__hover: rgba(0, 145, 255, 0.15);
   --border-color: rgba(0, 0, 0, 0.05);
   --outline-color_focus: rgb(66, 135, 245);
@@ -15,7 +16,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
 
   a {
-    color: #008bff;
+    /* text-decoration: none; */
+    color: var(--primary__color);
   }
 
   button {
@@ -55,13 +57,12 @@ body {
 }
 
 #root {
-  height: 100vh;
 }
 
 .editor-shell {
   position: relative;
   min-height: 100%;
-  color: #0a1e2f;
+  color: black;
   font-size: 14px;
   line-height: 1.5;
   display: flex;
@@ -171,7 +172,7 @@ body {
   display: flex;
 }
 
-.content-wrapper {
+.content-container {
   margin: 0px auto;
   max-width: 1100px;
   width: 100%;
@@ -187,7 +188,7 @@ body {
   background-color: #fff;
 }
 .more-action-row {
-  margin: 4px;
+  padding: 4px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -372,8 +373,7 @@ pre::-webkit-scrollbar-thumb {
   padding: 0;
   list-style: none;
   margin: 0;
-  border-radius: 8px;
-  max-height: 200px;
+  border-radius: 6px;
   overflow-y: scroll;
 }
 
@@ -389,26 +389,23 @@ pre::-webkit-scrollbar-thumb {
 .typeahead-popover ul li {
   outline: none;
   margin: 0;
-  min-width: 180px;
-  font-size: 14px;
   cursor: pointer;
 }
 
 .typeahead-popover ul li.selected {
-  background: #eee;
+  background: rgba(0, 0, 0, 0.03);
 }
 
 .typeahead-popover li {
   flex-shrink: 0;
   border: 0;
   margin: 0;
-  padding: 8px;
+  padding: 2px 8px;
   background-color: #fff;
   color: black;
   cursor: pointer;
   display: flex;
-  flex-direction: row;
-  align-content: center;
+  align-items: center;
 }
 
 .typeahead-popover li.active {
@@ -428,31 +425,29 @@ pre::-webkit-scrollbar-thumb {
 }
 
 .typeahead-popover li .icon {
-  display: flex;
-  width: 20px;
-  height: 20px;
-  user-select: none;
   margin-right: 8px;
-  line-height: 16px;
+  width: 16px;
+  height: 16px;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  line-height: 16px;
+  user-select: none;
+  display: flex;
 }
 
 .component-picker-menu {
-  width: 200px;
 }
-
 .mentions-menu {
-  width: 250px;
+  font-size: 12px;
 }
-
 .auto-embed-menu {
-  width: 150px;
+  font-size: 12px;
 }
-
 .emoji-menu {
-  width: 200px;
+  overflow: auto;
+  max-height: 200px;
+  font-size: 12px;
 }
 
 i.palette {

@@ -111,7 +111,7 @@ export default function Editor(): JSX.Element {
             </div>
           </div>}
           <div className='main-row'>
-            <div className="content-wrapper">
+            <div className="content-container">
               {isMaxLength && <MaxLengthPlugin maxLength={100000} />}
               <DragDropPaste />
               <AutoFocusPlugin />

@@ -13,6 +13,10 @@
   border-left: 0;
   border-right: 0;
   background-color: var(--blockquote-bg-color);
+  > span {
+    display: inline-block;
+    margin: 1em 0;
+  }
 }
 .PlaygroundEditorTheme__h1 {
   // font-size: 2em;
@@ -46,18 +50,17 @@
 .PlaygroundEditorTheme__textSuperscript {
 }
 .PlaygroundEditorTheme__textCode {
-  padding: 1px 0.25rem;
   border-radius: 3px;
-  background-color: var(--bg-color__hover);
+  padding: 1px 0;
+  background-color: rgba(0, 0, 0, 0.05);
+  font-size: 90%;
   font-family: monospace, Monaco, Menlo, Consolas;
-  font-size: 94%;
 }
 .PlaygroundEditorTheme__hashtag {
   background-color: rgba(88, 144, 255, 0.15);
   border-bottom: 1px solid rgba(88, 144, 255, 0.3);
 }
 .PlaygroundEditorTheme__link {
-  text-decoration: none;
 }
 .PlaygroundEditorTheme__link:hover {
   text-decoration: underline;
@@ -287,6 +290,7 @@
   padding-left: 25px;
 }
 .PlaygroundEditorTheme__listItemChecked {
+  color: rgba(0, 0, 0, 0.35);
   text-decoration: line-through;
 }
 .PlaygroundEditorTheme__listItemUnchecked:before,

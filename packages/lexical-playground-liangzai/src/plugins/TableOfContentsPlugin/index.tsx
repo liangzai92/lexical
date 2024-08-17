@@ -57,7 +57,10 @@ export function TableOfContentsList({
               role="button"
               className='heading-text'
               tabIndex={0}
-              onClick={() => scrollToNode(node)}
+              onClick={() => {
+                scrollToNode(node)
+                // 因为使用的scrollIntoView，但此方法不支持offset
+              }}
             >
               {node.text}
             </div>

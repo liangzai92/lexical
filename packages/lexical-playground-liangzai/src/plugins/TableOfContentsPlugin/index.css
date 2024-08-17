@@ -48,7 +48,7 @@
 }
 
 .heading-item.selected {
-  background-color: var(--bg-color__hover);
+  background-color: rgba(0, 0, 0, 0.03);
   .heading-text {
     color: #3578e5;
   }

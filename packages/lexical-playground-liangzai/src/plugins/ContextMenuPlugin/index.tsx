@@ -6,8 +6,8 @@
  *
  */
 
-import {$isLinkNode, TOGGLE_LINK_COMMAND} from '@lexical/link';
-import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
+import { $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import {
   LexicalContextMenuPlugin,
   MenuOption,
@@ -21,7 +21,7 @@ import {
   type LexicalNode,
   PASTE_COMMAND,
 } from 'lexical';
-import {useCallback, useMemo} from 'react';
+import { useCallback, useMemo } from 'react';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
@@ -107,17 +107,17 @@ export default function ContextMenuPlugin(): JSX.Element {
 
   const defaultOptions = useMemo(() => {
     return [
-      new ContextMenuOption(`Copy`, {
+      new ContextMenuOption(`复制`, {
         onSelect: (_node) => {
           editor.dispatchCommand(COPY_COMMAND, null);
         },
       }),
-      new ContextMenuOption(`Cut`, {
+      new ContextMenuOption(`剪切`, {
         onSelect: (_node) => {
           editor.dispatchCommand(CUT_COMMAND, null);
         },
       }),
-      new ContextMenuOption(`Paste`, {
+      new ContextMenuOption(`粘贴`, {
         onSelect: (_node) => {
           navigator.clipboard.read().then(async function (...args) {
             const data = new DataTransfer();
@@ -147,7 +147,7 @@ export default function ContextMenuPlugin(): JSX.Element {
           });
         },
       }),
-      new ContextMenuOption(`Paste as Plain Text`, {
+      new ContextMenuOption(`粘贴为普通文本`, {
         onSelect: (_node) => {
           navigator.clipboard.read().then(async function (...args) {
             const permission = await navigator.permissions.query({
@@ -171,7 +171,7 @@ export default function ContextMenuPlugin(): JSX.Element {
           });
         },
       }),
-      new ContextMenuOption(`Delete Node`, {
+      new ContextMenuOption(`删除`, {
         onSelect: (_node) => {
           const selection = $getSelection();
           if ($isRangeSelection(selection)) {
@@ -237,32 +237,31 @@ export default function ContextMenuPlugin(): JSX.Element {
           selectOptionAndCleanUp,
           setHighlightedIndex,
         },
-        {setMenuRef},
+        { setMenuRef },
       ) =>
         anchorElementRef.current
           ? ReactDOM.createPortal(
-              <div
-                className="typeahead-popover auto-embed-menu"
-                style={{
-                  marginLeft: anchorElementRef.current.style.width,
-                  userSelect: 'none',
-                  width: 200,
+            <div
+              className="typeahead-popover auto-embed-menu"
+              style={{
+                marginLeft: anchorElementRef.current.style.width,
+                userSelect: 'none',
+              }}
+              ref={setMenuRef}>
+              <ContextMenu
+                options={options}
+                selectedItemIndex={selectedIndex}
+                onOptionClick={(option: ContextMenuOption, index: number) => {
+                  setHighlightedIndex(index);
+                  selectOptionAndCleanUp(option);
                 }}
-                ref={setMenuRef}>
-                <ContextMenu
-                  options={options}
-                  selectedItemIndex={selectedIndex}
-                  onOptionClick={(option: ContextMenuOption, index: number) => {
-                    setHighlightedIndex(index);
-                    selectOptionAndCleanUp(option);
-                  }}
-                  onOptionMouseEnter={(index: number) => {
-                    setHighlightedIndex(index);
-                  }}
-                />
-              </div>,
-              anchorElementRef.current,
-            )
+                onOptionMouseEnter={(index: number) => {
+                  setHighlightedIndex(index);
+                }}
+              />
+            </div>,
+            anchorElementRef.current,
+          )
           : null
       }
     />

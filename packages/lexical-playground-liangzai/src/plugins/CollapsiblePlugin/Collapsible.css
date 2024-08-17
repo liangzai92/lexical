@@ -17,6 +17,15 @@
 .Collapsible__content {
   padding-left: 25px; /* 同 title */
   padding-right: 15px;
+  &::before {
+    display: table;
+    content: '';
+  }
+  &::after {
+    display: table;
+    clear: both;
+    content: '';
+  }
 }
 
 .Collapsible__title::marker,
