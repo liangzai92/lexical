@@ -30,7 +30,7 @@ class EventEmitter {
     this.on(type, magic);
   };
 
-  emit = (type, ...args: any[]) => {
+  emit = (type, ...args) => {
     const handlers = this._events[type] || [];
     for (let i = 0; i < handlers.length; i++) {
       const handler = this._events[type][i];

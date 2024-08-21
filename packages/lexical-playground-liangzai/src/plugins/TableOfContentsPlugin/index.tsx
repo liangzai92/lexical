@@ -3,6 +3,7 @@ import { TableOfContentsPlugin as LexicalTableOfContentsPlugin } from '@lexical/
 import useConnectContentAndHeadingWhenScroll from './useConnectContentAndHeadingWhenScroll';
 import { useEffect, useMemo, useRef } from 'react';
 import './index.css';
+import { getScrollParent } from '../../dom/getScrollParent';
 
 export function TableOfContentsList({
   contentHeadingList,
@@ -11,7 +12,6 @@ export function TableOfContentsList({
 }): JSX.Element {
   const { selectedNode, scrollToNode } = useConnectContentAndHeadingWhenScroll({ contentHeadingList: contentHeadingList });
   const itemsRef = useRef<HTMLLIElement[]>([]);
-  const scrollContainerRef = useRef<HTMLDivElement | any>(null);
 
   useEffect(() => {
     if (!selectedNode) {
@@ -21,18 +21,19 @@ export function TableOfContentsList({
     if (!el) {
       return
     }
+    const scrollContainerElement = getScrollParent(el, true);
+    const scrollContainerElementRect = scrollContainerElement.getBoundingClientRect();
     const elementRect = el.getBoundingClientRect();
-    const containerRect = scrollContainerRef.current.getBoundingClientRect();
-    if ((elementRect.top > containerRect.top) && elementRect.top < (containerRect.top + containerRect.height)) {
+    if ((elementRect.top > scrollContainerElementRect.top) && elementRect.top < (scrollContainerElementRect.top + scrollContainerElementRect.height)) {
       // console.log('in view')
-    } else if (elementRect.top > (containerRect.top + containerRect.height)) {
+    } else if (elementRect.top > (scrollContainerElementRect.top + scrollContainerElementRect.height)) {
       // 在容器 下外面
-      const delta = elementRect.top - (containerRect.top + containerRect.height)
-      scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollTop + delta + elementRect.height;
+      const delta = elementRect.top - (scrollContainerElementRect.top + scrollContainerElementRect.height)
+      scrollContainerElement.scrollTop = scrollContainerElement.scrollTop + delta + elementRect.height;
     } else {
       // 在容器 上外面
-      const delta = containerRect.top - elementRect.top
-      scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollTop - delta;
+      const delta = scrollContainerElementRect.top - elementRect.top
+      scrollContainerElement.scrollTop = scrollContainerElement.scrollTop - delta;
     }
   }, [selectedNode?.key])
 
@@ -71,7 +72,7 @@ export function TableOfContentsList({
   }
 
   return (
-    <div className="table-of-contents" ref={scrollContainerRef}>
+    <div className="table-of-contents">
       {contentHeadingList.length > 0 && <List />}
     </div>
   );

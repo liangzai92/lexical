@@ -1,7 +1,6 @@
 .table-of-contents {
   overflow: auto;
   box-sizing: border-box;
-  padding: 15px 0;
   max-height: 100%;
   font-size: 13px;
 }

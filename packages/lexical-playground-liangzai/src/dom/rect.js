@@ -50,15 +50,15 @@ class Rect {
     return visibleAreaBottom;
   };
 
-  isAbove = (rect: any) => {
+  isAbove = (rect) => {
     return rect.bottom < this._getVisibleAreaTop();
   };
 
-  isUnder = (rect: any) => {
+  isUnder = (rect) => {
     return rect.top > this._getVisibleAreaBottom();
   };
 
-  isIntersect = (rect: any) => {
+  isIntersect = (rect) => {
     const inTheVisibleArea = !this.isAbove(rect) && !this.isUnder(rect);
     return inTheVisibleArea;
   };

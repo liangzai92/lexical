@@ -70,7 +70,7 @@ import { IS_APPLE } from 'shared/environment';
 
 import useModal from '../../hooks/useModal';
 import catTypingGif from '../../images/cat-typing.gif';
-import { $createStickyNode } from '../../nodes/StickyNode';
+import { $createStickyNode } from '../../nodes/StickyNode/StickyNode';
 import DropDown, { DropDownItem } from '../../ui/DropDown';
 import DropdownColorPicker from '../../ui/DropdownColorPicker';
 import { getSelectedNode } from '../../utils/getSelectedNode';
@@ -476,7 +476,7 @@ function ElementFormatDropdown({
         }}
         className="item">
         <i className={'icon ' + (isRTL ? 'indent' : 'outdent')} />
-        <span className="text">Outdent</span>
+        <span className="text">减少缩进</span>
       </DropDownItem>
       <DropDownItem
         onClick={() => {
@@ -484,7 +484,7 @@ function ElementFormatDropdown({
         }}
         className="item">
         <i className={'icon ' + (isRTL ? 'outdent' : 'indent')} />
-        <span className="text">Indent</span>
+        <span className="text">增加缩进</span>
       </DropDownItem>
     </DropDown>
   );

@@ -24,7 +24,7 @@ import {
   $createPollNode,
   createPollOption,
   PollNode,
-} from '../../nodes/PollNode';
+} from '../../nodes/PollNode/PollNode';
 import Button from '../../ui/Button';
 import {DialogActions} from '../../ui/Dialog';
 import TextInput from '../../ui/TextInput';

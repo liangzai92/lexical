@@ -499,7 +499,7 @@ export function useMenuAnchorRef(
       }px`;
       containerDiv.style.left = `${left + window.pageXOffset}px`;
       containerDiv.style.height = `${height}px`;
-      containerDiv.style.width = `${width}px`;
+      // containerDiv.style.width = `${width}px`;
       if (menuEle !== null) {
         menuEle.style.top = `${top}`;
         const menuRect = menuEle.getBoundingClientRect();

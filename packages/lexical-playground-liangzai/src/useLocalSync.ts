@@ -14,14 +14,22 @@ const throttledSyncSerializedDocumentToLocalStorage = throttle(syncSerializedDoc
 export const useLocalSync = () => {
   const [editor] = useLexicalComposerContext();
 
-  useEffect(() => {
-    if (!editor) return
+  const syncEditorStateFromLocalStorage = () => {
     const jsonString = localStorage.getItem('lexical-document') || ''
     if (!jsonString || !jsonString.trim()) {
       return
     }
     const editorState = editorStateFromSerializedDocument(editor, jsonString);
     editor.setEditorState(editorState);
+  }
+
+  useEffect(() => {
+    if (!editor) return
+    // fetchRemoteDoc()
+    setTimeout(() => {
+      console.log('syncing editor state from local storage')
+      syncEditorStateFromLocalStorage()
+    }, 2000);
   }, [editor])
 
   // useEffect(() => {
@@ -33,4 +41,6 @@ export const useLocalSync = () => {
   //     unregisterListener();
   //   }
   // }, [editor]);
+  return {
+  }
 }

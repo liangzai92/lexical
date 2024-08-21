@@ -1,5 +1,3 @@
-export const isDevPlayground: boolean = true
-
 export const DEFAULT_SETTINGS = {
   disableBeforeInput: false,
   isAutocomplete: true,

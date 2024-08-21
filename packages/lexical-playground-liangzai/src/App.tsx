@@ -1,5 +1,4 @@
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
-import { isDevPlayground } from './appSettings';
 import { FlashMessageContext } from './context/FlashMessageContext';
 import { SettingsContext, useSettings } from './context/SettingsContext';
 import { SharedAutocompleteContext } from './context/SharedAutocompleteContext';
@@ -32,17 +31,17 @@ function App(): JSX.Element {
     if (isCollab) {
       initialConfig.editorState = null // 
     } else {
-      // initialConfig.editorState = $prepopulatedRichText;
+      initialConfig.editorState = $prepopulatedRichText;
       // 这个参数可以是个回调，里面异步与否就随便搞了
-      initialConfig.editorState = (editor: any) => {
-        // 从localStorage中获取文档
-        const jsonString = localStorage.getItem('lexical-document') || ''
-        if (jsonString || jsonString.trim()) {
-          const editorState = editorStateFromSerializedDocument(editor, jsonString);
-          editor.setEditorState(editorState);
-        }
-        // fetchRemoteDoc()
-      };
+      // initialConfig.editorState = (editor: any) => {
+      //   // 从localStorage中获取文档
+      //   const jsonString = localStorage.getItem('lexical-document') || ''
+      //   if (jsonString || jsonString.trim()) {
+      //     const editorState = editorStateFromSerializedDocument(editor, jsonString);
+      //     editor.setEditorState(editorState);
+      //   }
+      // };
+      // fetchRemoteDoc()
     }
     return initialConfig;
   }
@@ -53,10 +52,12 @@ function App(): JSX.Element {
       <SharedHistoryContext>
         <TableContext>
           <SharedAutocompleteContext>
+            <div className='page-header'></div>
             <Editor />
             <Settings />
-            {isDevPlayground ? <PasteLogPlugin /> : null}
-            {measureTypingPerf ? <TypingPerfPlugin /> : null}
+            <PasteLogPlugin />
+            <TypingPerfPlugin />
+            <div className='page-footer'></div>
           </SharedAutocompleteContext>
         </TableContext>
       </SharedHistoryContext>
@@ -64,7 +65,7 @@ function App(): JSX.Element {
   );
 }
 
-export default function PlaygroundApp(): JSX.Element {
+export default function AppWrapper(): JSX.Element {
   return (
     <SettingsContext>
       <FlashMessageContext>

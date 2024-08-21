@@ -197,14 +197,14 @@ function TableHoverActionsContainer({
     <>
       {isShownRow && (
         <button
-          className={'PlaygroundEditorTheme__tableAddRows'}
+          className={'tableAddRows'}
           style={{...position}}
           onClick={() => insertAction(true)}
         />
       )}
       {isShownColumn && (
         <button
-          className={'PlaygroundEditorTheme__tableAddColumns'}
+          className={'tableAddColumns'}
           style={{...position}}
           onClick={() => insertAction(false)}
         />
@@ -221,16 +221,16 @@ function getMouseInfo(event: MouseEvent): {
 
   if (target && target instanceof HTMLElement) {
     const tableDOMNode = target.closest<HTMLElement>(
-      'td.PlaygroundEditorTheme__tableCell, th.PlaygroundEditorTheme__tableCell',
+      'td.tableCell, th.tableCell',
     );
 
     const isOutside = !(
       tableDOMNode ||
       target.closest<HTMLElement>(
-        'button.PlaygroundEditorTheme__tableAddRows',
+        'button.tableAddRows',
       ) ||
       target.closest<HTMLElement>(
-        'button.PlaygroundEditorTheme__tableAddColumns',
+        'button.tableAddColumns',
       ) ||
       target.closest<HTMLElement>('div.TableCellResizer__resizer')
     );

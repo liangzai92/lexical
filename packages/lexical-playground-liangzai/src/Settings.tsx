@@ -1,8 +1,8 @@
-import {CAN_USE_BEFORE_INPUT} from '@lexical/utils';
-import {useEffect, useMemo, useState} from 'react';
+import { CAN_USE_BEFORE_INPUT } from '@lexical/utils';
+import { useEffect, useMemo, useState } from 'react';
 
-import {INITIAL_SETTINGS, isDevPlayground} from './appSettings';
-import {useSettings} from './context/SettingsContext';
+import { INITIAL_SETTINGS } from './appSettings';
+import { useSettings } from './context/SettingsContext';
 import Switch from './ui/Switch';
 
 export default function Settings(): JSX.Element {
@@ -46,29 +46,25 @@ export default function Settings(): JSX.Element {
       />
       {showSettings ? (
         <div className="switches">
-          {isDevPlayground && (
-            <Switch
-              onClick={() => {
-                setOption('isCollab', !isCollab);
-                window.location.reload();
-              }}
-              checked={isCollab}
-              text="Collaboration"
-            />
-          )}
-          {isDevPlayground && (
-            <Switch
-              onClick={() => {
-                if (isSplitScreen) {
-                  window.parent.location.href = `/${search}`;
-                } else {
-                  window.location.href = `/split/${search}`;
-                }
-              }}
-              checked={isSplitScreen}
-              text="Split Screen"
-            />
-          )}
+          <Switch
+            onClick={() => {
+              setOption('isCollab', !isCollab);
+              window.location.reload();
+            }}
+            checked={isCollab}
+            text="Collaboration"
+          />
+          <Switch
+            onClick={() => {
+              if (isSplitScreen) {
+                window.parent.location.href = `/${search}`;
+              } else {
+                window.location.href = `/split/${search}`;
+              }
+            }}
+            checked={isSplitScreen}
+            text="Split Screen"
+          />
           <Switch
             onClick={() => setOption('measureTypingPerf', !measureTypingPerf)}
             checked={measureTypingPerf}

@@ -13,9 +13,7 @@ import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { TabIndentationPlugin } from '@lexical/react/LexicalTabIndentationPlugin';
 import { TablePlugin } from '@lexical/react/LexicalTablePlugin';
 import { useLexicalEditable } from '@lexical/react/useLexicalEditable';
-import { useEffect, useState } from 'react';
-import { CAN_USE_DOM } from 'shared/canUseDOM';
-
+import { useState } from 'react';
 import { createWebsocketProvider } from './collaboration';
 import { useSettings } from './context/SettingsContext';
 import { useSharedHistoryContext } from './context/SharedHistoryContext';
@@ -63,6 +61,7 @@ import { useTextContentSize } from './useTextContentSize';
 import { useHotkeys } from './useHotkeys';
 import { useSmallWidthViewport } from './useSmallWidthViewport';
 import { MenuUnfoldOutlined } from '@ant-design/icons';
+import { useLocalSync } from './useLocalSync';
 
 export default function Editor(): JSX.Element {
   const { historyState } = useSharedHistoryContext();
@@ -84,6 +83,7 @@ export default function Editor(): JSX.Element {
   const isSmallWidthViewport = useSmallWidthViewport();
   const { textContentSize } = useTextContentSize()
   useHotkeys()
+  useLocalSync()
 
   const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | null>(null);
   const onRef = (_floatingAnchorElem: HTMLDivElement) => {
@@ -117,11 +117,11 @@ export default function Editor(): JSX.Element {
               <AutoFocusPlugin />
               <ClearEditorPlugin />
               <ComponentPickerPlugin />
-              <EmojiPickerPlugin />
               <AutoEmbedPlugin />
 
-              <MentionsPlugin />
               <EmojisPlugin />
+              <EmojiPickerPlugin />
+              <MentionsPlugin />
               <HashtagPlugin />
               <KeywordsPlugin />
               <SpeechToTextPlugin />

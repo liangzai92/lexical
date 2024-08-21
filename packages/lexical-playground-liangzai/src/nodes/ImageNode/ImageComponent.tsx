@@ -51,20 +51,19 @@ import {
 import * as React from 'react';
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 
-import { createWebsocketProvider } from '../collaboration';
-import { useSettings } from '../context/SettingsContext';
-import { useSharedHistoryContext } from '../context/SharedHistoryContext';
-import brokenImage from '../images/image-broken.svg';
-import EmojisPlugin from '../plugins/EmojisPlugin';
-import KeywordsPlugin from '../plugins/KeywordsPlugin';
-import LinkPlugin from '../plugins/LinkPlugin';
-import MentionsPlugin from '../plugins/MentionsPlugin';
-import TreeViewPlugin from '../plugins/TreeViewPlugin';
-import ContentEditable from '../ui/ContentEditable';
-import ImageResizer from '../ui/ImageResizer';
-import { EmojiNode } from './EmojiNode';
+import { createWebsocketProvider } from '../../collaboration';
+import { useSettings } from '../../context/SettingsContext';
+import { useSharedHistoryContext } from '../../context/SharedHistoryContext';
+import brokenImage from '../../images/image-broken.svg';
+import EmojisPlugin from '../../plugins/EmojisPlugin';
+import KeywordsPlugin from '../../plugins/KeywordsPlugin';
+import LinkPlugin from '../../plugins/LinkPlugin';
+import MentionsPlugin from '../../plugins/MentionsPlugin';
+import ContentEditable from '../../ui/ContentEditable';
+import ImageResizer from '../../ui/ImageResizer';
+import { EmojiNode } from '../EmojiNode';
 import { $isImageNode } from './ImageNode';
-import { KeywordNode } from './KeywordNode';
+import { KeywordNode } from '../KeywordNode/KeywordNode';
 
 const imageCache = new Set();
 
