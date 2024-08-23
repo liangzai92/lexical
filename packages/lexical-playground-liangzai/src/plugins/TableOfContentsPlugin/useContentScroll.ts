@@ -1,11 +1,9 @@
 import { throttle } from 'lodash-es';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import MyScroll from '../../dom/scroll'
 import Rect from '../../dom/rect'
 const containerRect = new Rect()
-
-const scrollContainer = document.documentElement
 
 // 获取当前视口内的最上面的heading 从 startNode 开始 从下往上
 const getTopHeadingInViewport = (editor: any, startNode: any, nodeList: any[] = []) => {
@@ -61,48 +59,51 @@ const getBottomHeadingInViewport = (editor: any, startNode: any, nodeList: any[]
   return targetNode;
 }
 
-function useConnectContentAndHeadingWhenScroll({
+const getTargetNode = (editor: any, startNode: any, nodeList: any[], scrollDirection: any) => {
+  let targetNode = startNode;
+  if (!startNode) {
+    targetNode = nodeList[0];
+  }
+  const currentHeadingElement = editor.getElementByKey(targetNode.key);
+  if (!currentHeadingElement) {
+    return
+  }
+  if (scrollDirection === 'down') {
+    const topHeading: any = getTopHeadingInViewport(editor, targetNode, nodeList);
+    targetNode = topHeading;
+  } else {
+    const bottomHeading: any = getBottomHeadingInViewport(editor, targetNode, nodeList);
+    targetNode = bottomHeading;
+  }
+  return targetNode
+}
+
+export function useContentScroll({
   contentHeadingList,
+  onTargetNodeChange,
+  selectedNode,
 }: {
+  selectedNode: any,
   contentHeadingList: Array<any>;
+  onTargetNodeChange: any
 }) {
   const [editor] = useLexicalComposerContext();
-  const [selectedNode, setSelectedNode] = useState<any>(contentHeadingList[0]);
-  const lock = useRef(false);
 
   const scrollCallback = (e?: any) => {
-    if (lock.current) {
-      return
-    }
     const scrollDirection = e?.direction || 'up';
-    const getTargetNode = (currentHeadingNode: any, nodeList: any[]) => {
-      let targetNode = currentHeadingNode;
-      if (!currentHeadingNode) {
-        targetNode = nodeList[0];
-      }
-      const currentHeadingElement = editor.getElementByKey(targetNode.key);
-      if (!currentHeadingElement) {
-        return
-      }
-      if (scrollDirection === 'down') {
-        const topHeading: any = getTopHeadingInViewport(editor, targetNode, nodeList);
-        targetNode = topHeading;
-      } else {
-        const bottomHeading: any = getBottomHeadingInViewport(editor, targetNode, nodeList);
-        targetNode = bottomHeading;
-      }
-      return targetNode
-    }
-
-    const targetNode = getTargetNode(selectedNode, contentHeadingList)
+    const targetNode = getTargetNode(editor, selectedNode, contentHeadingList, scrollDirection)
     if (targetNode) {
-      setSelectedNode(targetNode);
+      onTargetNodeChange(targetNode);
     }
   }
 
   useEffect(() => {
-    if (!selectedNode && contentHeadingList[0]) {
-      setSelectedNode(contentHeadingList[0])
+    const currentFirstNode = contentHeadingList[0]
+    if (!currentFirstNode) {
+      return
+    }
+    if (!selectedNode || !editor.getElementByKey(selectedNode?.key)) {
+      onTargetNodeChange(currentFirstNode)
       scrollCallback() // 初始化的时候，需要触发一次 根据当前content 定位右边
     }
   }, [contentHeadingList])
@@ -113,32 +114,12 @@ function useConnectContentAndHeadingWhenScroll({
     }
 
     const myScroll = new MyScroll()
-    const throttledScrollCallback = throttle(scrollCallback, 60);
+    const throttledScrollCallback = throttle(scrollCallback, 60); // 这里实际上并未生效，得优化
     myScroll.on('scroll', throttledScrollCallback);
     return () => {
       myScroll.destroy()
     }
-  }, [contentHeadingList, editor, selectedNode]);
-
-  const scrollToNode = (node: any) => {
-    editor.getEditorState().read(() => {
-      const domElement = editor.getElementByKey(node.key);
-      if (!domElement) {
-        return
-      }
-      setSelectedNode(node)
-      domElement.scrollIntoView(); // 换成scroll scrollTo
-      const style = window.getComputedStyle(domElement);
-      const headingTopGap = (30 + parseFloat(style.marginTop))
-      scrollContainer.scrollBy(0, -headingTopGap); // 由于scrollIntoView不支持offset，所以这里用scrollBy来模拟
-      lock.current = true
-      setTimeout(() => {
-        lock.current = false
-      }, 200)
-    });
-  }
-
-  return { selectedNode, scrollToNode };
+  }, [contentHeadingList, selectedNode, editor]);
 }
 
-export default useConnectContentAndHeadingWhenScroll;
+export default useContentScroll;

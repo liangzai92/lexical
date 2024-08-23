@@ -31,9 +31,9 @@
 
 .link-editor .button i,
 .actions i {
-  background-size: contain;
   display: inline-block;
-  height: 15px;
-  width: 15px;
+  height: 1em;
+  width: 1em;
+  background-size: contain;
   vertical-align: -0.25em;
 }

@@ -90,6 +90,8 @@ import { INSERT_PAGE_BREAK } from '../PageBreakPlugin';
 import { InsertPollDialog } from '../PollPlugin';
 import { InsertTableDialog } from '../TablePlugin';
 import FontSize from './fontSize';
+import { clearFormatting } from '../../helpers/clearFormatting';
+import './index.css'
 
 const blockTypeToBlockName = {
   bullet: '无序列表',
@@ -735,62 +737,6 @@ export default function ToolbarPlugin({
     [activeEditor],
   );
 
-  const clearFormatting = useCallback(() => {
-    activeEditor.update(() => {
-      const selection = $getSelection();
-      if ($isRangeSelection(selection) || $isTableSelection(selection)) {
-        const anchor = selection.anchor;
-        const focus = selection.focus;
-        const nodes = selection.getNodes();
-        const extractedNodes = selection.extract();
-
-        if (anchor.key === focus.key && anchor.offset === focus.offset) {
-          return;
-        }
-
-        nodes.forEach((node, idx) => {
-          // We split the first and last node by the selection
-          // So that we don't format unselected text inside those nodes
-          if ($isTextNode(node)) {
-            // Use a separate variable to ensure TS does not lose the refinement
-            let textNode = node;
-            if (idx === 0 && anchor.offset !== 0) {
-              textNode = textNode.splitText(anchor.offset)[1] || textNode;
-            }
-            if (idx === nodes.length - 1) {
-              textNode = textNode.splitText(focus.offset)[0] || textNode;
-            }
-            /**
-             * If the selected text has one format applied
-             * selecting a portion of the text, could
-             * clear the format to the wrong portion of the text.
-             *
-             * The cleared text is based on the length of the selected text.
-             */
-            // We need this in case the selected text only has one format
-            const extractedTextNode = extractedNodes[0];
-            if (nodes.length === 1 && $isTextNode(extractedTextNode)) {
-              textNode = extractedTextNode;
-            }
-
-            if (textNode.__style !== '') {
-              textNode.setStyle('');
-            }
-            if (textNode.__format !== 0) {
-              textNode.setFormat(0);
-              $getNearestBlockElementAncestorOrThrow(textNode).setFormat('');
-            }
-            node = textNode;
-          } else if ($isHeadingNode(node) || $isQuoteNode(node)) {
-            node.replace($createParagraphNode(), true);
-          } else if ($isDecoratorBlockNode(node)) {
-            node.setFormat('');
-          }
-        });
-      }
-    });
-  }, [activeEditor]);
-
   const onFontColorSelect = useCallback(
     (value: string, skipHistoryStack: boolean) => {
       applyStyleText({ color: value }, skipHistoryStack);
@@ -1038,10 +984,13 @@ export default function ToolbarPlugin({
               <span className="text">Superscript</span>
             </DropDownItem>
             <DropDownItem
-              onClick={clearFormatting}
+              onClick={() => {
+                clearFormatting(activeEditor)
+              }}
               className="item"
               title="Clear text formatting"
-              aria-label="Clear all text formatting">
+              aria-label="Clear all text formatting"
+            >
               <span className='icon'>
                 <ClearOutlined />
               </span>
@@ -1227,7 +1176,6 @@ export default function ToolbarPlugin({
         editor={activeEditor}
         isRTL={isRTL}
       />
-
       {modal}
     </div>
   );

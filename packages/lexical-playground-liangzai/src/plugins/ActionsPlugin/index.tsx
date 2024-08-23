@@ -36,6 +36,7 @@ import {
   SPEECH_TO_TEXT_COMMAND,
   SUPPORT_SPEECH_RECOGNITION,
 } from '../SpeechToTextPlugin';
+import './index.scoped.scss'
 
 async function sendEditorState(editor: LexicalEditor): Promise<void> {
   const stringifiedEditorState = JSON.stringify(editor.getEditorState());
@@ -177,7 +178,7 @@ export default function ActionsPlugin(): JSX.Element {
   }, [editor]);
 
   return (
-    <div className="actions">
+    <div className="more-action-list">
       {SUPPORT_SPEECH_RECOGNITION && (
         <button
           onClick={() => {
@@ -185,7 +186,7 @@ export default function ActionsPlugin(): JSX.Element {
             setIsSpeechToText(!isSpeechToText);
           }}
           className={
-            'action-button action-button-mic ' +
+            'action-item action-item-mic ' +
             (isSpeechToText ? 'active' : '')
           }
           title="Speech To Text"
@@ -195,14 +196,14 @@ export default function ActionsPlugin(): JSX.Element {
         </button>
       )}
       <button
-        className="action-button import"
+        className="action-item import"
         onClick={() => importFile(editor)}
         title="Import"
         aria-label="Import editor state from JSON">
         <i className="import" />
       </button>
       <button
-        className="action-button export"
+        className="action-item export"
         onClick={() =>
           exportFile(editor, {
             fileName: `adebibi_editor ${new Date().toISOString()}`,
@@ -214,7 +215,7 @@ export default function ActionsPlugin(): JSX.Element {
         <i className="export" />
       </button>
       <button
-        className="action-button share"
+        className="action-item share"
         disabled={isCollabActive || INITIAL_SETTINGS.isCollab}
         onClick={() =>
           shareDoc(
@@ -231,7 +232,7 @@ export default function ActionsPlugin(): JSX.Element {
         <i className="share" />
       </button>
       <button
-        className="action-button clear"
+        className="action-item clear"
         disabled={isEditorEmpty}
         onClick={() => {
           showModal('Clear editor', (onClose) => (
@@ -243,7 +244,7 @@ export default function ActionsPlugin(): JSX.Element {
         <i className="clear" />
       </button>
       <button
-        className={`action-button ${!isEditable ? 'unlock' : 'lock'}`}
+        className={`action-item ${!isEditable ? 'unlock' : 'lock'}`}
         onClick={() => {
           // Send latest editor state to commenting validation server
           if (isEditable) {
@@ -256,7 +257,7 @@ export default function ActionsPlugin(): JSX.Element {
         <i className={!isEditable ? 'unlock' : 'lock'} />
       </button>
       <button
-        className="action-button"
+        className="action-item"
         onClick={handleMarkdownToggle}
         title="Convert From Markdown"
         aria-label="Convert from markdown">
@@ -264,7 +265,7 @@ export default function ActionsPlugin(): JSX.Element {
       </button>
       {isCollabActive && (
         <button
-          className="action-button connect"
+          className="action-item connect"
           onClick={() => {
             editor.dispatchCommand(TOGGLE_CONNECT_COMMAND, !connected);
           }}

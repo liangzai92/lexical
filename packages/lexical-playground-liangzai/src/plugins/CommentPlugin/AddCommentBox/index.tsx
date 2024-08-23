@@ -5,6 +5,7 @@ import type {
 } from 'lexical';
 import { useCallback, useEffect, useRef } from 'react';
 import useLayoutEffect from 'shared/useLayoutEffect';
+import { getElementPositionRelativeToScrollContainer } from '../../../dom/getScrollParent';
 import './index.css';
 
 function AddCommentBox({
@@ -22,18 +23,17 @@ function AddCommentBox({
     const boxElem = boxRef.current;
     const rootElement = editor.getRootElement();
     const anchorElement = editor.getElementByKey(anchorKey);
-
     if (boxElem !== null && rootElement !== null && anchorElement !== null) {
       const { right } = rootElement.getBoundingClientRect();
-      const { top } = anchorElement.getBoundingClientRect();
-      boxElem.style.left = `${right - 20}px`;
+      const { top } = getElementPositionRelativeToScrollContainer(anchorElement);
+      console.log('top', top);
+      boxElem.style.left = `${right - 30}px`;
       boxElem.style.top = `${top - 30}px`;
     }
   }, [anchorKey, editor]);
 
   useEffect(() => {
     window.addEventListener('resize', updatePosition);
-
     return () => {
       window.removeEventListener('resize', updatePosition);
     };

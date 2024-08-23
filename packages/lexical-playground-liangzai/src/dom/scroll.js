@@ -34,7 +34,6 @@ class MyScroll extends EventEmitter {
   };
 
   _handleOriginEvent = (event) => {
-    // 使用箭头函数 确保this指向不被修改.
     this.originEvent = event;
     this._handleEvent(event);
   };

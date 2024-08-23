@@ -1,0 +1,38 @@
+.more-action-list {
+  margin: 0 -1px;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+}
+
+.action-item {
+  position: relative;
+  margin: 0 1px;
+  border: 0;
+  padding: 0 4px;
+  height: 21px;
+  min-width: 24px;
+  border-radius: 4px;
+  background-color: white;
+  color: black;
+  cursor: pointer;
+  i {
+    display: inline-block;
+    height: 1em;
+    width: 1em;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  &:hover {
+    background-color: var(--lz-color__bg__hover);
+    color: #000;
+  }
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.action-item-mic.active {
+  animation: mic-pulsate-color 3s infinite;
+}

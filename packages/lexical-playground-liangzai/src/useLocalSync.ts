@@ -27,7 +27,6 @@ export const useLocalSync = () => {
     if (!editor) return
     // fetchRemoteDoc()
     setTimeout(() => {
-      console.log('syncing editor state from local storage')
       syncEditorStateFromLocalStorage()
     }, 2000);
   }, [editor])

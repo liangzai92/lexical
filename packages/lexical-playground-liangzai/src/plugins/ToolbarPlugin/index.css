@@ -1,0 +1,116 @@
+.toolbar {
+  overflow-x: auto;
+  box-sizing: border-box;
+  padding: 3px 0;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.toolbar-item {
+  flex-shrink: 0;
+  margin: 0 1px;
+  border: 0;
+  padding: 0 5px;
+  height: 21px;
+  min-width: 24px;
+  border-radius: 4px;
+  background: none;
+  font-size: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  i.format {
+    background-size: contain;
+  }
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+button.toolbar-item:disabled .icon,
+button.toolbar-item:disabled .text,
+button.toolbar-item:disabled i.format,
+button.toolbar-item:disabled .chevron-down {
+  opacity: 0.2;
+}
+
+button.toolbar-item.active {
+  background-color: var(--lz-color__bg__active);
+}
+
+button.toolbar-item.active i {
+  opacity: 1;
+}
+
+.toolbar-item:hover:not([disabled]) {
+  background-color: var(--lz-color__bg__hover);
+}
+
+.toolbar-item.font-family .text {
+  display: block;
+  max-width: 40px;
+}
+
+.toolbar .toolbar-item .text {
+  overflow: hidden;
+  margin: 0 6px;
+  text-align: left;
+  vertical-align: middle;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+}
+
+.toolbar .toolbar-item {
+  .icon {
+    width: 1em;
+    height: 1em;
+    background-size: contain;
+    background-repeat: no-repeat;
+    user-select: none;
+  }
+  .icon-wrapper {
+    position: relative;
+    .indicator {
+      position: absolute;
+      left: 50%;
+      bottom: 0px;
+      transform: translate3d(-50%, 0, 0);
+      box-sizing: border-box;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      width: 120%;
+      height: 5px;
+      border-radius: 4px;
+    }
+  }
+}
+
+.toolbar i.chevron-down,
+.toolbar-item i.chevron-down {
+  width: 14px;
+  height: 14px;
+  user-select: none;
+  display: flex;
+}
+
+.toolbar i.chevron-down.inside {
+  width: 14px;
+  height: 14px;
+  display: flex;
+  margin-left: -25px;
+  margin-top: 11px;
+  margin-right: 10px;
+  pointer-events: none;
+}
+
+.toolbar .divider {
+  margin: 0 4px;
+  height: 1em;
+  width: 1px;
+  background-color: var(--lz-color_divider__border);
+}

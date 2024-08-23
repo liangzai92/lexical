@@ -1,53 +1,73 @@
 import classNames from 'classnames'
 import { TableOfContentsPlugin as LexicalTableOfContentsPlugin } from '@lexical/react/LexicalTableOfContentsPlugin';
-import useConnectContentAndHeadingWhenScroll from './useConnectContentAndHeadingWhenScroll';
-import { useEffect, useMemo, useRef } from 'react';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { useRef, useState } from 'react';
+import { scrollElementIntoView, scrollElementIntoView2 } from '../../dom/scrollElementIntoView';
+import useContentScroll from './useContentScroll';
 import './index.css';
-import { getScrollParent } from '../../dom/getScrollParent';
 
 export function TableOfContentsList({
   contentHeadingList,
 }: {
   contentHeadingList: Array<any>;
 }): JSX.Element {
-  const { selectedNode, scrollToNode } = useConnectContentAndHeadingWhenScroll({ contentHeadingList: contentHeadingList });
+  const [editor] = useLexicalComposerContext();
+  const [selectedNode, setSelectedNode] = useState<any>(null)
   const itemsRef = useRef<HTMLLIElement[]>([]);
+  const instanceProps = useRef({
+    lockSyncTarget: false,
+    isPointerEnter: false,
+  })
 
-  useEffect(() => {
-    if (!selectedNode) {
-      return
-    }
-    const el = itemsRef.current[selectedNode.index];
-    if (!el) {
-      return
-    }
-    const scrollContainerElement = getScrollParent(el, true);
-    const scrollContainerElementRect = scrollContainerElement.getBoundingClientRect();
-    const elementRect = el.getBoundingClientRect();
-    if ((elementRect.top > scrollContainerElementRect.top) && elementRect.top < (scrollContainerElementRect.top + scrollContainerElementRect.height)) {
-      // console.log('in view')
-    } else if (elementRect.top > (scrollContainerElementRect.top + scrollContainerElementRect.height)) {
-      // 在容器 下外面
-      const delta = elementRect.top - (scrollContainerElementRect.top + scrollContainerElementRect.height)
-      scrollContainerElement.scrollTop = scrollContainerElement.scrollTop + delta + elementRect.height;
-    } else {
-      // 在容器 上外面
-      const delta = scrollContainerElementRect.top - elementRect.top
-      scrollContainerElement.scrollTop = scrollContainerElement.scrollTop - delta;
-    }
-  }, [selectedNode?.key])
+  const scrollNodeIntoView = (node: any) => {
+    editor.getEditorState().read(() => {
+      const domElement = editor.getElementByKey(node.key);
+      if (!domElement) {
+        return
+      }
+      setSelectedNode(node)
+      scrollElementIntoView2(domElement, 30) // 这个30后面要改成动态的
+      instanceProps.current.lockSyncTarget = true
+      setTimeout(() => {
+        instanceProps.current.lockSyncTarget = false
+      }, 200)
+    });
+  }
+
+  useContentScroll({
+    contentHeadingList: contentHeadingList,
+    selectedNode,
+    onTargetNodeChange: (targetNode) => {
+      if (instanceProps.current.lockSyncTarget) {
+        return
+      }
+      setSelectedNode(targetNode)
+      if (instanceProps.current.isPointerEnter) {
+        // 如果鼠标在目录上，不自动滚动
+        return
+      }
+      if (!targetNode) {
+        return
+      }
+      const el = itemsRef.current[targetNode.index];
+      if (el) {
+        scrollElementIntoView(el);
+      }
+    },
+  });
 
   const List = () => {
-    if (!contentHeadingList.length || !selectedNode) {
+    if (!contentHeadingList?.length) {
       return null
     }
+
     return <ul className="heading-list">
       {contentHeadingList.map((node, index) => {
         return (
           <li
             key={node.key}
             className={classNames('heading-item', {
-              'selected': selectedNode.key === node.key,
+              'selected': selectedNode?.key === node.key,
               [`heading-${node.tag}`]: true,
             })}
             ref={(el) => {
@@ -59,8 +79,7 @@ export function TableOfContentsList({
               className='heading-text'
               tabIndex={0}
               onClick={() => {
-                scrollToNode(node)
-                // 因为使用的scrollIntoView，但此方法不支持offset
+                scrollNodeIntoView(node)
               }}
             >
               {node.text}
@@ -72,8 +91,15 @@ export function TableOfContentsList({
   }
 
   return (
-    <div className="table-of-contents">
-      {contentHeadingList.length > 0 && <List />}
+    <div className="table-of-contents"
+      onPointerEnter={() => {
+        instanceProps.current.isPointerEnter = true
+      }}
+      onPointerLeave={() => {
+        instanceProps.current.isPointerEnter = false
+      }}
+    >
+      <List />
     </div>
   );
 }

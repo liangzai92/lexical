@@ -1,3 +1,4 @@
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import './fontSize.css';
 
 import { $patchStyleText } from '@lexical/selection';
@@ -188,7 +189,7 @@ export default function FontSize({
         }
         onClick={() => handleButtonClick(updateFontSizeType.decrement)}
         className="toolbar-item font-decrement">
-        <i className="format minus-icon" />
+        <MinusOutlined />
       </button>
 
       <input
@@ -212,7 +213,7 @@ export default function FontSize({
         }
         onClick={() => handleButtonClick(updateFontSizeType.increment)}
         className="toolbar-item font-increment">
-        <i className="format add-icon" />
+        <PlusOutlined />
       </button>
     </>
   );

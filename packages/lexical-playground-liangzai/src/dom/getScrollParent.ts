@@ -8,7 +8,7 @@ export function getScrollParent(
     ? /(auto|scroll|hidden)/
     : /(auto|scroll)/;
   if (style.position === 'fixed') {
-    return document.body;
+    return document.documentElement;
   }
   for (
     let parent: HTMLElement | null = element;
@@ -25,5 +25,26 @@ export function getScrollParent(
       return parent;
     }
   }
-  return document.body;
+  return document.documentElement;
+}
+
+
+export function getElementPositionRelativeToScrollContainer(element: HTMLElement | any) {
+  let xPos = 0;
+  let yPos = 0;
+  const scrollParent = getScrollParent(element, false);
+
+  while (element) {
+    if (element === scrollParent) {
+      break;
+    }
+    xPos += element.offsetLeft - element.scrollLeft + element.clientLeft;
+    yPos += element.offsetTop - element.scrollTop + element.clientTop;
+    element = element.offsetParent;
+  }
+
+  return {
+    left: xPos,
+    top: yPos
+  };
 }

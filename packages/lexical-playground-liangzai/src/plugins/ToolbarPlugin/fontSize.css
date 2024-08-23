@@ -1,28 +1,7 @@
 .font-size-input {
-  padding: 2px 4px;
+  padding: 2px 3px;
+  border: 1px solid var(--lz-color__border);
   width: 20px;
   border-radius: 4px;
-  border: 1px solid var(--border-color);
   text-align: center;
-}
-.add-icon {
-  background-image: url(../../images/icons/add-sign.svg);
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
-.minus-icon {
-  background-image: url(../../images/icons/minus-sign.svg);
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
-button.font-decrement {
-  padding: 0px;
-  margin-right: 3px;
-}
-
-button.font-increment {
-  padding: 0px;
-  margin-left: 3px;
 }

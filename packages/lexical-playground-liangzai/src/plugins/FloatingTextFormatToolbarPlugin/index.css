@@ -4,63 +4,55 @@
   top: 0;
   left: 0;
   opacity: 0;
-  padding: 4px;
   border-radius: 6px;
   box-shadow: var(--shadow-island);
-  background: #fff;
+  background-color: var(--lz-color_popover__bg);
+  color: var(--lz-color_popover__font);
+  font-size: 12px;
   transition: opacity 0.5s;
   will-change: transform;
-  display: flex;
+  .control-list {
+    margin: 0 -1px;
+    margin-bottom: -2px;
+    padding: 3px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .control-item {
+    margin: 0 1px;
+    margin-bottom: 2px;
+    padding: 0;
+    border: 0;
+    height: 21px;
+    min-width: 24px;
+    border-radius: 5px;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    i.format {
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+    &:disabled {
+      cursor: not-allowed;
+      i.format {
+        opacity: 0.2;
+      }
+    }
+    &.active {
+      background-color: var(--lz-color__bg__active);
+    }
+  }
 }
 
-.floating-text-format-popup button.popup-item {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  height: 24px;
-  width: 26px;
-  border-radius: 5px;
-  background: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.floating-text-format-popup .control-item:hover:not([disabled]) {
+  background-color: var(--lz-color__bg__hover);
 }
 
-.floating-text-format-popup button.popup-item:disabled {
-  cursor: not-allowed;
-}
-
-.floating-text-format-popup button.popup-item.spaced {
-  margin-right: 2px;
-}
-
-.floating-text-format-popup button.popup-item i.format {
-  height: 16px;
-  width: 16px;
-  background-size: contain;
-  vertical-align: -0.25em;
-  opacity: 0.6;
-  display: flex;
-}
-
-.floating-text-format-popup button.popup-item:disabled i.format {
-  opacity: 0.2;
-}
-
-.floating-text-format-popup button.popup-item.active {
-  background-color: var(--bg-color__active);
-}
-
-.floating-text-format-popup button.popup-item.active i {
-  opacity: 1;
-}
-
-.floating-text-format-popup .popup-item:hover:not([disabled]) {
-  background-color: var(--bg-color__hover);
-}
-
-.floating-text-format-popup select.popup-item {
+.floating-text-format-popup select.control-item {
   border: 0;
   display: flex;
   background: none;
@@ -80,7 +72,7 @@
   width: 130px;
 }
 
-.floating-text-format-popup .popup-item .text {
+.floating-text-format-popup .control-item .text {
   overflow: hidden;
   height: 20px;
   width: 70px;
@@ -91,7 +83,7 @@
   display: flex;
 }
 
-.floating-text-format-popup .popup-item .icon {
+.floating-text-format-popup .control-item .icon {
   display: flex;
   width: 20px;
   height: 20px;
@@ -119,9 +111,10 @@
 }
 
 .floating-text-format-popup .divider {
+  margin: 0 4px;
+  height: 1em;
   width: 1px;
   background-color: #eee;
-  margin: 0 4px;
 }
 
 @media (max-width: 1024px) {

@@ -527,7 +527,8 @@ function TableActionMenu({
             />
           ))
         }
-        data-test-id="table-background-color">
+        data-test-id="table-background-color"
+      >
         <span className="text">Background color</span>
       </button>
       <hr />

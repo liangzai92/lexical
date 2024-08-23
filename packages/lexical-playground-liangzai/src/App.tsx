@@ -12,13 +12,15 @@ import Settings from './Settings';
 import PlaygroundEditorTheme from './themes/PlaygroundEditorTheme';
 import $prepopulatedRichText from './prepopulatedRichText';
 import { editorStateFromSerializedDocument } from '@lexical/file';
+import ArticleAuthor from './components/ArticleAuthor';
+import { useEffect, useState } from 'react';
 
 function App(): JSX.Element {
   const {
     settings: { measureTypingPerf, isCollab },
   } = useSettings();
 
-  const getInitialConfig = () => {
+  const getInitialConfig = async () => {
     const initialConfig: any = {
       namespace: 'editor.adebibi.com',
       editorState: undefined,
@@ -45,19 +47,44 @@ function App(): JSX.Element {
     }
     return initialConfig;
   }
-  const initialConfig = getInitialConfig(); // 只有初始化的时候 非响应式 因为只在mounted的时候初始化执行一次 具体可以看LexicalComposer组件的实现
+
+  const [pageStatus, setPageStatus] = useState('pending');
+  const [initialConfig, setInitialConfig] = useState<any>(null);
+  const init = async () => {
+    const initialConfig = await getInitialConfig(); // 只有初始化的时候 非响应式 因为只在mounted的时候初始化执行一次 具体可以看LexicalComposer组件的实现
+    setInitialConfig(initialConfig);
+    setPageStatus('resolve')
+  }
+  
+  useEffect(() => {
+    init()
+  }, [])
+
+  if (pageStatus === 'pending') {
+    return <div>loading...</div>
+  }
+
+  if (pageStatus === 'reject') {
+    return <div>error</div>
+  }
 
   return (
     <LexicalComposer initialConfig={initialConfig}>
       <SharedHistoryContext>
         <TableContext>
           <SharedAutocompleteContext>
-            <div className='page-header'></div>
-            <Editor />
-            <Settings />
-            <PasteLogPlugin />
-            <TypingPerfPlugin />
-            <div className='page-footer'></div>
+            <div className='editor-page'>
+              <div className='page-header'>
+                <ArticleAuthor />
+              </div>
+              <Editor />
+              <div className='page-footer'></div>
+              <div>
+                <Settings />
+                <PasteLogPlugin />
+                <TypingPerfPlugin />
+              </div>
+            </div>
           </SharedAutocompleteContext>
         </TableContext>
       </SharedHistoryContext>

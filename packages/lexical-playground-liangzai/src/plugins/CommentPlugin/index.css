@@ -1,37 +1,36 @@
 .CommentPlugin_AddCommentBox {
-  z-index: 10;
-  position: fixed;
-  display: block;
-}
-
-.CommentPlugin_AddCommentBox_button {
-  height: 30px;
-  width: 30px;
-  border-radius: 6px;
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
-  background-color: white;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.CommentPlugin_AddCommentBox_button:hover {
-  background-color: #f6f6f6;
-}
-
-i.add-comment {
-  height: 16px;
-  width: 16px;
-  background-image: url(../../images/icons/chat-left-text.svg);
-  background-size: contain;
-  background-repeat: no-repeat;
+  z-index: 1;
+  position: absolute;
+  overflow: hidden;
+  border-radius: 5px;
+  box-shadow: var(--shadow-island);
 }
 
 @media (max-width: 1024px) {
   .CommentPlugin_AddCommentBox {
     display: none;
   }
+}
+
+.CommentPlugin_AddCommentBox_button {
+  height: 24px;
+  width: 24px;
+  background-color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    background-color: var(--lz-color__bg__hover);
+  }
+}
+
+.CommentPlugin_AddCommentBox_button i.add-comment {
+  height: 16px;
+  width: 16px;
+  background-image: url(../../images/icons/chat-left-text.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 .CommentPlugin_CommentInputBox {
@@ -77,7 +76,7 @@ i.add-comment {
 
 .CommentPlugin_CommentInputBox_Buttons {
   padding: 6px;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--lz-color__border);
   background-color: white;
   display: flex;
   flex-direction: row;
@@ -114,7 +113,7 @@ i.add-comment {
   flex-grow: 1;
   flex-shrink: 1;
   border-radius: 6px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lz-color__border);
 }
 .CommentPlugin_CommentInputBox_Editor {
   position: relative;
@@ -238,7 +237,7 @@ i.send {
 
 .CommentPlugin_CommentsPanel_List_Comment
   + .CommentPlugin_CommentsPanel_List_Comment {
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--lz-color__border);
 }
 
 .CommentPlugin_CommentsPanel_List_Thread.active

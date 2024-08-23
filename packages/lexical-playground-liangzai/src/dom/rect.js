@@ -30,11 +30,11 @@ class Rect {
   };
 
   getScrollContainerTopCover = () => {
-    return 30;
+    return 30; // 这个后面要搞成动态的
   };
 
   getScrollContainerBottomCover = () => {
-    return 30;
+    return 30; // 这个后面要搞成动态的
   };
 
   _getVisibleAreaTop = () => {

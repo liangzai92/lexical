@@ -21,7 +21,7 @@
 }
 
 .draggable-block-menu:hover {
-  background-color: #efefef;
+  background-color: var(--lz-color_draggable_control_hover);
 }
 
 .draggable-block-target-line {
