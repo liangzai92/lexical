@@ -55,7 +55,7 @@
       transform: translateY(-50%);
       left: 0px;
       height: 100%;
-      width: 2px;
+      width: 1px;
       background-color: var(--lz-color__primary);
     }
   }

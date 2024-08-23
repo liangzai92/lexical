@@ -7,7 +7,7 @@
   border-radius: 6px;
   box-shadow: var(--shadow-island);
   background-color: var(--lz-color_popover__bg);
-  color: var(--lz-color_popover__font);
+  color: var(--lz-color_popover__text);
   font-size: 12px;
   transition: opacity 0.5s;
   will-change: transform;
@@ -49,7 +49,7 @@
 }
 
 .floating-text-format-popup .control-item:hover:not([disabled]) {
-  background-color: var(--lz-color__bg__hover);
+  background-color: var(--lz-color_popover__bg__hover);
 }
 
 .floating-text-format-popup select.control-item {

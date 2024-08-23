@@ -594,7 +594,7 @@ pre::-webkit-scrollbar-thumb {
   border-radius: 8px;
   box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1),
     inset 0 0 0 1px rgba(255, 255, 255, 0.5);
-  background-color: #fff;
+  background-color: var(--lz-color_popover__bg);
   font-size: 12px;
 }
 
@@ -605,8 +605,6 @@ pre::-webkit-scrollbar-thumb {
   border: 0;
   padding: 3px 5px;
   max-width: 250px;
-  background-color: #fff;
-  color: black;
   font-size: inherit;
   cursor: pointer;
   display: flex;
@@ -627,7 +625,7 @@ pre::-webkit-scrollbar-thumb {
 }
 
 .dropdown .item:hover {
-  background-color: var(--lz-color__bg__hover);
+  background-color: var(--lz-color_popover__bg__hover);
 }
 
 .dropdown .item .text {
@@ -652,7 +650,7 @@ pre::-webkit-scrollbar-thumb {
   margin: 4px 8px;
   height: 1px;
   width: auto;
-  background-color: #eee;
+  background-color: var(--lz-color_divider__border);
 }
 
 @media screen and (max-width: 1100px) {

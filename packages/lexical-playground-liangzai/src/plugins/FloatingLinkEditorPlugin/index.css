@@ -6,7 +6,7 @@
   max-width: 375px;
   border-radius: 8px;
   box-shadow: var(--shadow-island);
-  background-color: #fff;
+  background-color: var(--lz-color__border);
   opacity: 0;
   transition: opacity 0.5s;
   will-change: transform;

@@ -2,6 +2,7 @@ import './index.scss';
 import './icon.scss'
 import { setTheme } from './setThemeCssVar';
 // setTheme('dark');
+// setTheme('contrast');
 setTheme('light');
 import setupEnv from './setupEnv';
 import { createRoot } from 'react-dom/client';

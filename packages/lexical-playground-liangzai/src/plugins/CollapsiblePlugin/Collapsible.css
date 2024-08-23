@@ -23,7 +23,7 @@
 }
 
 .Collapsible__content {
-  padding-left: 25px; /* 同 title */
+  padding-left: 20px; /* 同 title */
   padding-right: 15px;
   &::before {
     display: table;
