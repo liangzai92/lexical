@@ -6,7 +6,7 @@ import { useCallback, useEffect } from 'react';
 
 import { $createKeywordNode, KeywordNode } from '../../nodes/KeywordNode/KeywordNode';
 
-const KEYWORDS_REGEX = /(^|$|[^A-Za-z])(congrats|todo|失败|成功|重点|警告|危险|注意|梁仔)(^|$|[^A-Za-z])/i;
+const KEYWORDS_REGEX = /(^|$|[^A-Za-z])(congrats|todo|失败|成功|重点|警告|危险|注意：|梁仔)(^|$|[^A-Za-z])/i;
 
 export default function KeywordsPlugin(): JSX.Element | null {
   const [editor] = useLexicalComposerContext();

@@ -15,22 +15,22 @@ export function TableOfContentsList({
   const [selectedNode, setSelectedNode] = useState<any>(null)
   const itemsRef = useRef<HTMLLIElement[]>([]);
   const instanceProps = useRef({
-    lockSyncTarget: false,
+    isSyncTarget: true,
     isPointerEnter: false,
   })
 
   const scrollNodeIntoView = (node: any) => {
     editor.getEditorState().read(() => {
+      setSelectedNode(node)
       const domElement = editor.getElementByKey(node.key);
       if (!domElement) {
         return
       }
-      setSelectedNode(node)
       scrollElementIntoView2(domElement, 30) // 这个30后面要改成动态的
-      instanceProps.current.lockSyncTarget = true
+      instanceProps.current.isSyncTarget = false
       setTimeout(() => {
-        instanceProps.current.lockSyncTarget = false
-      }, 200)
+        instanceProps.current.isSyncTarget = true
+      }, 150) // 一定要确保200 滚动已经结束
     });
   }
 
@@ -38,7 +38,7 @@ export function TableOfContentsList({
     contentHeadingList: contentHeadingList,
     selectedNode,
     onTargetNodeChange: (targetNode) => {
-      if (instanceProps.current.lockSyncTarget) {
+      if (!instanceProps.current.isSyncTarget) {
         return
       }
       setSelectedNode(targetNode)
@@ -108,7 +108,10 @@ export default function TableOfContentsPlugin() {
   return (
     <LexicalTableOfContentsPlugin>
       {(tableOfContents) => {
-        const contentHeadingList = tableOfContents.map(([key, text, tag], index) => {
+        const contentHeadingList = tableOfContents.filter(([key, text, tag]) => {
+          // 只显示 h1 h2 h3
+          return ['h1', 'h2', 'h3'].includes(tag)
+        }).map(([key, text, tag], index) => {
           return { key, text, tag, index }
         })
         return <TableOfContentsList contentHeadingList={contentHeadingList} />;

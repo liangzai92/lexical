@@ -1,66 +1,72 @@
-.Collapsible__container {
-  margin: 1em 0;
-  border-radius: 6px;
-  border: 1px solid var(--lz-color_collapsible__border);
-  background: var(--lz-color_collapsible__bg);
-}
-
-.Collapsible__title {
-  list-style: none;
-  outline: none;
-  cursor: pointer;
-  position: relative;
-  padding-left: 25px;
-  padding-right: 15px;
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    margin: 0.6em 0;
+.ContentEditable__root {
+  .Collapsible__container {
+    margin: 0.6px -12px;
+    border: 1px solid var(--lz-color_collapsible__border);
+    border-radius: 0.4em;
+    background: var(--lz-color_collapsible__bg);
+    .hr:after {
+      border-top-color: var(--lz-color_collapsible__border);
+    }
   }
-}
 
-.Collapsible__content {
-  padding-left: 20px; /* 同 title */
-  padding-right: 15px;
-  &::before {
-    display: table;
-    content: '';
+  .Collapsible__title {
+    overflow: hidden;
+    list-style: none;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    padding-left: 12px;
+    padding-right: 25px;
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin: 6px 0;
+    }
+
+    &:before {
+      display: block;
+      content: '';
+      position: absolute;
+      right: 1em;
+      top: 50%;
+      transform: translateY(-50%);
+      border-style: solid;
+      border-color: transparent;
+      border-width: 4px 6px 4px 6px;
+      border-left-color: var(--lz-color_font);
+    }
   }
-  &::after {
-    display: table;
-    clear: both;
-    content: '';
+
+  .Collapsible__content {
+    padding: 0 12px;
+    &::before {
+      display: table;
+      content: '';
+    }
+    &::after {
+      display: table;
+      clear: both;
+      content: '';
+    }
   }
-}
 
-.Collapsible__title::marker,
-.Collapsible__title::-webkit-details-marker {
-  display: none;
-}
+  .Collapsible__title::marker,
+  .Collapsible__title::-webkit-details-marker {
+    display: none;
+  }
 
-.Collapsible__title:before {
-  display: block;
-  content: '';
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  border-style: solid;
-  border-color: transparent;
-  border-width: 4px 6px 4px 6px;
-  border-left-color: var(--lz-color_font);
-}
+  .Collapsible__container[open] {
+    > .Collapsible__title:before {
+      border-color: transparent;
+      border-width: 6px 4px 0 4px;
+      border-top-color: var(--lz-color_font);
+    }
 
-.Collapsible__container[open] > .Collapsible__title:before {
-  border-color: transparent;
-  border-width: 6px 4px 0 4px;
-  border-top-color: var(--lz-color_font);
-}
-
-.Collapsible__collapsed .Collapsible__content {
-  display: none;
-  user-select: none;
+    .Collapsible__content {
+      border-top: 1px solid var(--lz-color_collapsible__border);
+    }
+  }
 }

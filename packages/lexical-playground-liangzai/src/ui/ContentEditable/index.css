@@ -1,6 +1,7 @@
 .ContentEditable__wrapper {
   position: relative;
   height: 100%;
+  line-height: 1.5;
 }
 
 [data-lexical-editor][contenteditable].ContentEditable__root {

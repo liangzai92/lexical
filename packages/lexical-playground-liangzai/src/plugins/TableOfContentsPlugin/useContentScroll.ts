@@ -8,24 +8,26 @@ const containerRect = new Rect()
 // 获取当前视口内的最上面的heading 从 startNode 开始 从下往上
 const getTopHeadingInViewport = (editor: any, startNode: any, nodeList: any[] = []) => {
   let targetNode = startNode;
-
   let hasFind = false // 已经发现过处于当前视口内的heading了 从上往下的时候，从第一次发现开始，只需要再发现符合在视口内的就行了 避免遍历全部浪费性能
   for (let i = startNode.index - 1; i >= 0; i--) {
     const currentNode = nodeList[i];
-    const currentElement = editor.getElementByKey(currentNode.key);
+    const currentElement = editor.getElementByKey(currentNode?.key);
     if (!currentElement) {
       break
     }
-    const clientRect = currentElement?.getClientRects()[0]
+    const clientRect = currentElement?.getBoundingClientRect()
     if (containerRect.isIntersect(clientRect)) {
       targetNode = currentNode;
       hasFind = true
     } else {
       if (hasFind) {
         // targetNode = currentNode; // 从下往上找的时候 上一个heading标签虽然不在范围内，但section在。
-        // const prevRect = editor.getElementByKey(targetNode.key)?.getClientRects?.()?.[0]
-        // console.log('prevRect', prevRect)
-        // if (prevRect?.top > 100) {
+        // const prevElement = editor.getElementByKey(targetNode.key);
+        // const prevRect = prevElement.getBoundingClientRect()
+        // const style = window.getComputedStyle(prevElement);
+        // const offset = 30 + 30 // 理论上这些都不能写死。
+        // const topThreshold = (offset + parseFloat(style.marginTop))
+        // if (prevRect?.top > topThreshold) { // 说明上一个段落已经漏出来了
         //   targetNode = currentNode;
         // }
         break
@@ -42,11 +44,11 @@ const getBottomHeadingInViewport = (editor: any, startNode: any, nodeList: any[]
   let hasFind = false // 已经发现过处于当前视口内的heading了 从上往下的时候，从第一次发现开始，只需要再发现符合在视口内的就行了 避免遍历全部浪费性能
   for (let i = startNode.index + 1; i < nodeList.length; i++) {
     const currentNode: any = nodeList[i];
-    const currentElement = editor.getElementByKey(currentNode.key);
+    const currentElement = editor.getElementByKey(currentNode?.key);
     if (!currentElement) {
       break
     }
-    const clientRect = currentElement?.getClientRects()[0]
+    const clientRect = currentElement?.getBoundingClientRect()
     if (containerRect.isIntersect(clientRect)) {
       targetNode = currentNode;
       hasFind = true
