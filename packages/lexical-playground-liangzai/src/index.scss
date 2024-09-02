@@ -6,6 +6,7 @@
 body {
   margin: 0;
   padding: 0;
+  font-size: 14px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
@@ -57,7 +58,6 @@ body {
 }
 
 #root {
-  font-size: 14px;
 }
 
 .editor-page {
@@ -123,7 +123,7 @@ body {
   padding: 0;
   width: 30px;
   height: 30px;
-  background-color: var(--lz-color__bg__hover);
+  background-color: var(--lz-color_bg__hover);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -147,7 +147,7 @@ body {
   box-sizing: border-box;
   border: 0;
   padding: 0 15px;
-  caret-color: var(--ls-color_text);
+  caret-color: var(--lz-color_text);
   /**
    * 非常重要，清除浮动。这里的关键是 margin上下塌陷的问题。
    */
@@ -181,7 +181,7 @@ body {
   top: 0;
   border-bottom: 1px solid var(--lz-color__border);
   max-width: 100vw;
-  background-color: var(--lz-color__bg);
+  background-color: var(--lz-color_bg);
 }
 
 .main-row {
@@ -204,7 +204,7 @@ body {
   position: sticky;
   bottom: 0;
   border-top: 1px solid var(--lz-color__border);
-  background-color: var(--lz-color__bg);
+  background-color: var(--lz-color_bg);
 }
 .more-action-row {
   display: flex;
@@ -410,7 +410,7 @@ pre::-webkit-scrollbar-thumb {
 }
 
 .typeahead-popover ul li.selected {
-  background-color: var(--lz-color__bg__active);
+  background-color: var(--lz-color_bg__active);
 }
 
 .typeahead-popover li {
@@ -431,7 +431,7 @@ pre::-webkit-scrollbar-thumb {
 }
 
 .typeahead-popover li:hover {
-  background-color: var(--lz-color__bg__hover);
+  background-color: var(--lz-color_bg__hover);
 }
 
 .typeahead-popover li .text {
@@ -497,6 +497,7 @@ pre::-webkit-scrollbar-thumb {
     width: 100%;
     border-radius: 5px;
     background-color: rgba(0, 0, 0, 0.05);
+    color: var(--lz-color_text)
   }
   .link-confirm {
     cursor: pointer;
@@ -1264,7 +1265,7 @@ button.item i {
 }
 
 button.item.dropdown-item-active {
-  background-color: var(--lz-color__bg__active);
+  background-color: var(--lz-color_bg__active);
 }
 
 button.item.dropdown-item-active i {

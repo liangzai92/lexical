@@ -31,7 +31,7 @@ export default function DraggableBlockPlugin({
       targetLineRef={targetLineRef}
       menuComponent={
         <div ref={menuRef} className="icon draggable-block-menu">
-          <div className="icon" />
+          <i className='icon iconfont icon-drag'></i>
         </div>
       }
       targetLineComponent={

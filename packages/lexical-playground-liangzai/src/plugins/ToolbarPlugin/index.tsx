@@ -899,7 +899,7 @@ export default function ToolbarPlugin({
               title="Insert code block"
               type="button"
               aria-label="Insert code block">
-              <i className="format code" />
+              <i className="format icon iconfont icon-code" />
             </button>
           )}
           <button
@@ -909,18 +909,15 @@ export default function ToolbarPlugin({
             aria-label="Insert link"
             title="Insert link"
             type="button">
-            <LinkOutlined />
+            <i className='icon iconfont icon-link'></i>
           </button>
           <DropdownColorPicker
             disabled={!isEditable}
             buttonClassName="toolbar-item color-picker"
             buttonAriaLabel="Formatting text color"
-            icon={<span className='icon-wrapper'>
-              <FontColorsOutlined />
-              <span className='indicator' style={{
-                backgroundColor: fontColor,
-              }}></span>
-            </span>}
+            icon={<i className='icon iconfont icon-text-color' style={{
+              color: fontColor
+            }}></i>}
             color={fontColor}
             onChange={onFontColorSelect}
             title="text color"
@@ -930,12 +927,9 @@ export default function ToolbarPlugin({
             disabled={!isEditable}
             buttonClassName="toolbar-item color-picker"
             buttonAriaLabel="Formatting background color"
-            icon={<span className='icon-wrapper'>
-              <BgColorsOutlined />
-              <span className='indicator' style={{
-                backgroundColor: bgColor,
-              }}></span>
-            </span>}
+            icon={<i className='icon iconfont icon-backgroundColor' style={{
+              color: bgColor
+            }}></i>}
             color={bgColor}
             onChange={onBgColorSelect}
             title="bg color"

@@ -1,7 +1,8 @@
 import './index.scss';
 import './icon.scss'
+import './assets/iconfont/iconfont.css';
 import { setTheme } from './setThemeCssVar';
-setTheme('light'); // dark light contrast 
+setTheme('dark'); // dark light contrast
 import setupEnv from './setupEnv';
 import { createRoot } from 'react-dom/client';
 import App from './App';

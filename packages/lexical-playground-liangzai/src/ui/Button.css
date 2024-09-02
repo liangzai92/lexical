@@ -9,7 +9,7 @@
   justify-content: center;
 }
 .Button__root:hover {
-  background-color: #ddd;
+  background-color: var(--lz-color_text__contrast_with_bg__2);
 }
 .Button__small {
   padding-top: 5px;

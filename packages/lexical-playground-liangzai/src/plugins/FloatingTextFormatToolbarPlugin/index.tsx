@@ -227,7 +227,7 @@ function TextFormatFloatingToolbar({
               className={'control-item spaced ' + (isSubscript ? 'active' : '')}
               title="Subscript"
               aria-label="Format Subscript">
-              <i className="format subscript" />
+              <i className="icon iconfont icon-format-subscript" />
             </button>
             <button
               type="button"
@@ -237,7 +237,7 @@ function TextFormatFloatingToolbar({
               className={'control-item spaced ' + (isSuperscript ? 'active' : '')}
               title="Superscript"
               aria-label="Format Superscript">
-              <i className="format superscript" />
+              <i className="icon iconfont icon-superscript1" />
             </button>
             <button
               type="button"
@@ -246,14 +246,14 @@ function TextFormatFloatingToolbar({
               }}
               className={'control-item spaced ' + (isCode ? 'active' : '')}
               aria-label="Insert code block">
-              <i className="format code" />
+              <i className="format icon iconfont icon-code" />
             </button>
             <button
               type="button"
               onClick={insertLink}
               className={'control-item spaced ' + (isLink ? 'active' : '')}
               aria-label="Insert link">
-              <LinkOutlined />
+              <i className='icon iconfont icon-link'></i>
             </button>
             <Divider />
             <button

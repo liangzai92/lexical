@@ -40,7 +40,7 @@ button.toolbar-item:disabled .chevron-down {
 }
 
 button.toolbar-item.active {
-  background-color: var(--lz-color__bg__active);
+  background-color: var(--lz-color_bg__active);
 }
 
 button.toolbar-item.active i {
@@ -48,7 +48,7 @@ button.toolbar-item.active i {
 }
 
 .toolbar-item:hover:not([disabled]) {
-  background-color: var(--lz-color__bg__hover);
+  background-color: var(--lz-color_bg__hover);
 }
 
 .toolbar-item.font-family .text {
@@ -64,30 +64,6 @@ button.toolbar-item.active i {
   text-overflow: ellipsis;
   white-space: nowrap;
   display: flex;
-}
-
-.toolbar .toolbar-item {
-  .icon {
-    width: 1em;
-    height: 1em;
-    background-size: contain;
-    background-repeat: no-repeat;
-    user-select: none;
-  }
-  .icon-wrapper {
-    position: relative;
-    .indicator {
-      position: absolute;
-      left: 50%;
-      bottom: 0px;
-      transform: translate3d(-50%, 0, 0);
-      box-sizing: border-box;
-      border: 1px solid rgba(0, 0, 0, 0.05);
-      width: 120%;
-      height: 5px;
-      border-radius: 4px;
-    }
-  }
 }
 
 .toolbar i.chevron-down,

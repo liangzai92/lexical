@@ -2,6 +2,7 @@ import { editorStateFromSerializedDocument, serializedDocumentFromEditorState } 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { throttle } from "lodash-es";
 import { useEffect } from "react";
+import { transformHtmlStringToEditor } from "./helpers/transformHtmlStringToEditor";
 
 const syncSerializedDocumentToLocalStorage = (editor: any) => {
   const doc = serializedDocumentFromEditorState(editor.getEditorState(), {
@@ -27,6 +28,7 @@ export const useLocalSync = () => {
     if (!editor) return
     // fetchRemoteDoc()
     setTimeout(() => {
+      // transformHtmlStringToEditor(editor, '<p>hello world</p>')
       syncEditorStateFromLocalStorage()
     }, 2000);
   }, [editor])
@@ -43,3 +45,5 @@ export const useLocalSync = () => {
   return {
   }
 }
+
+
