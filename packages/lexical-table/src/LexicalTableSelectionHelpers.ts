@@ -24,7 +24,11 @@ import type {
   TextFormatType,
 } from 'lexical';
 
-import {$findMatchingParent} from '@lexical/utils';
+import {
+  $getClipboardDataFromSelection,
+  copyToClipboard,
+} from '@lexical/clipboard';
+import {$findMatchingParent, objectKlassEquals} from '@lexical/utils';
 import {
   $createParagraphNode,
   $createRangeSelectionFromDom,
@@ -41,6 +45,7 @@ import {
   COMMAND_PRIORITY_CRITICAL,
   COMMAND_PRIORITY_HIGH,
   CONTROLLED_TEXT_INSERTION_COMMAND,
+  CUT_COMMAND,
   DELETE_CHARACTER_COMMAND,
   DELETE_LINE_COMMAND,
   DELETE_WORD_COMMAND,
@@ -66,10 +71,7 @@ import {$isTableCellNode} from './LexicalTableCellNode';
 import {$isTableNode} from './LexicalTableNode';
 import {TableDOMTable, TableObserver} from './LexicalTableObserver';
 import {$isTableRowNode} from './LexicalTableRowNode';
-import {
-  $createTableSelection,
-  $isTableSelection,
-} from './LexicalTableSelection';
+import {$isTableSelection} from './LexicalTableSelection';
 import {$computeTableMap, $getNodeTriplet} from './LexicalTableUtils';
 
 const LEXICAL_ELEMENT_KEY = '__lexicalTableSelection';
@@ -99,6 +101,9 @@ export function applyTableHandlers(
   const editorWindow = editor._window || window;
 
   attachTableObserverToTableElement(tableElement, tableObserver);
+  tableObserver.listenersToRemove.add(() =>
+    deatatchTableObserverFromTableElement(tableElement, tableObserver),
+  );
 
   const createMouseHandlers = () => {
     const onMouseUp = () => {
@@ -127,10 +132,10 @@ export function applyTableHandlers(
         }
       }, 0);
     };
-    return {onMouseMove: onMouseMove, onMouseUp: onMouseUp};
+    return {onMouseMove, onMouseUp};
   };
 
-  tableElement.addEventListener('mousedown', (event: MouseEvent) => {
+  const onMouseDown = (event: MouseEvent) => {
     setTimeout(() => {
       if (event.button !== 0) {
         return;
@@ -148,10 +153,23 @@ export function applyTableHandlers(
 
       const {onMouseUp, onMouseMove} = createMouseHandlers();
       tableObserver.isSelecting = true;
-      editorWindow.addEventListener('mouseup', onMouseUp);
-      editorWindow.addEventListener('mousemove', onMouseMove);
+      editorWindow.addEventListener(
+        'mouseup',
+        onMouseUp,
+        tableObserver.listenerOptions,
+      );
+      editorWindow.addEventListener(
+        'mousemove',
+        onMouseMove,
+        tableObserver.listenerOptions,
+      );
     }, 0);
-  });
+  };
+  tableElement.addEventListener(
+    'mousedown',
+    onMouseDown,
+    tableObserver.listenerOptions,
+  );
 
   // Clear selection when clicking outside of dom.
   const mouseDownCallback = (event: MouseEvent) => {
@@ -172,10 +190,10 @@ export function applyTableHandlers(
     });
   };
 
-  editorWindow.addEventListener('mousedown', mouseDownCallback);
-
-  tableObserver.listenersToRemove.add(() =>
-    editorWindow.removeEventListener('mousedown', mouseDownCallback),
+  editorWindow.addEventListener(
+    'mousedown',
+    mouseDownCallback,
+    tableObserver.listenerOptions,
   );
 
   tableObserver.listenersToRemove.add(
@@ -314,7 +332,9 @@ export function applyTableHandlers(
     },
   );
 
-  const $deleteCellHandler = (event: KeyboardEvent): boolean => {
+  const $deleteCellHandler = (
+    event: KeyboardEvent | ClipboardEvent | null,
+  ): boolean => {
     const selection = $getSelection();
 
     if (!$isSelectionInTable(selection, tableNode)) {
@@ -336,8 +356,10 @@ export function applyTableHandlers(
     }
 
     if ($isTableSelection(selection)) {
-      event.preventDefault();
-      event.stopPropagation();
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
       tableObserver.clearText();
 
       return true;
@@ -367,6 +389,36 @@ export function applyTableHandlers(
     editor.registerCommand<KeyboardEvent>(
       KEY_DELETE_COMMAND,
       $deleteCellHandler,
+      COMMAND_PRIORITY_CRITICAL,
+    ),
+  );
+
+  tableObserver.listenersToRemove.add(
+    editor.registerCommand<KeyboardEvent | ClipboardEvent | null>(
+      CUT_COMMAND,
+      (event) => {
+        const selection = $getSelection();
+        if (selection) {
+          if (!($isTableSelection(selection) || $isRangeSelection(selection))) {
+            return false;
+          }
+          // Copying to the clipboard is async so we must capture the data
+          // before we delete it
+          void copyToClipboard(
+            editor,
+            objectKlassEquals(event, ClipboardEvent)
+              ? (event as ClipboardEvent)
+              : null,
+            $getClipboardDataFromSelection(selection),
+          );
+          const intercepted = $deleteCellHandler(event);
+          if ($isRangeSelection(selection)) {
+            selection.removeText();
+          }
+          return intercepted;
+        }
+        return false;
+      },
       COMMAND_PRIORITY_CRITICAL,
     ),
   );
@@ -633,8 +685,6 @@ export function applyTableHandlers(
         const toY = Math.max(startY, stopY);
         const gridRowNodes = gridNode.getChildren();
         let newRowIdx = 0;
-        let newAnchorCellKey;
-        let newFocusCellKey;
 
         for (let r = fromY; r <= toY; r++) {
           const currentGridRowNode = gridRowNodes[r];
@@ -666,12 +716,6 @@ export function applyTableHandlers(
               return false;
             }
 
-            if (r === fromY && c === fromX) {
-              newAnchorCellKey = currentGridCellNode.getKey();
-            } else if (r === toY && c === toX) {
-              newFocusCellKey = currentGridCellNode.getKey();
-            }
-
             const originalChildren = currentGridCellNode.getChildren();
             newGridCellNode.getChildren().forEach((child) => {
               if ($isTextNode(child)) {
@@ -687,15 +731,6 @@ export function applyTableHandlers(
           }
 
           newRowIdx++;
-        }
-        if (newAnchorCellKey && newFocusCellKey) {
-          const newTableSelection = $createTableSelection();
-          newTableSelection.set(
-            nodes[0].getKey(),
-            newAnchorCellKey,
-            newFocusCellKey,
-          );
-          $setSelection(newTableSelection);
         }
         return true;
       },
@@ -743,14 +778,6 @@ export function applyTableHandlers(
                 isBackward
                   ? firstCell.getChildrenSize()
                   : lastCell.getChildrenSize(),
-                'element',
-              );
-            } else {
-              newSelection.anchor.set(
-                tableNode.getParentOrThrow().getKey(),
-                isBackward
-                  ? tableNode.getIndexWithinParent() + 1
-                  : tableNode.getIndexWithinParent(),
                 'element',
               );
             }
@@ -894,20 +921,34 @@ export function applyTableHandlers(
   return tableObserver;
 }
 
-export type HTMLTableElementWithWithTableSelectionState = HTMLTableElement &
-  Record<typeof LEXICAL_ELEMENT_KEY, TableObserver>;
+export type HTMLTableElementWithWithTableSelectionState = HTMLTableElement & {
+  [LEXICAL_ELEMENT_KEY]?: TableObserver | undefined;
+};
+
+export function deatatchTableObserverFromTableElement(
+  tableElement: HTMLTableElementWithWithTableSelectionState,
+  tableObserver: TableObserver,
+) {
+  if (getTableObserverFromTableElement(tableElement) === tableObserver) {
+    delete tableElement[LEXICAL_ELEMENT_KEY];
+  }
+}
 
 export function attachTableObserverToTableElement(
   tableElement: HTMLTableElementWithWithTableSelectionState,
   tableObserver: TableObserver,
 ) {
+  invariant(
+    getTableObserverFromTableElement(tableElement) === null,
+    'tableElement already has an attached TableObserver',
+  );
   tableElement[LEXICAL_ELEMENT_KEY] = tableObserver;
 }
 
 export function getTableObserverFromTableElement(
   tableElement: HTMLTableElementWithWithTableSelectionState,
 ): TableObserver | null {
-  return tableElement[LEXICAL_ELEMENT_KEY];
+  return tableElement[LEXICAL_ELEMENT_KEY] || null;
 }
 
 export function getDOMCellFromTarget(node: Node): TableDOMCell | null {
