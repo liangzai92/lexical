@@ -12,10 +12,10 @@ function getRandomHighSaturationColor() {
 function setThemeCssVars(theme: 'dark' | 'light' | 'contrast') {
   const color_primary = getRandomHighSaturationColor();
   const [h, s, l, a] = chroma(color_primary).hsl();
-  let color_warning = chroma('yellow').set('hsl.s', s).set('hsl.l', l).hex();
-  let color_success = chroma('green').set('hsl.s', s).set('hsl.l', l).hex();
-  let color_error = chroma('red').set('hsl.s', s).set('hsl.l', l).hex();
-  let color_link = chroma('blue').set('hsl.s', s).set('hsl.l', l).hex();
+  let color_warning = '#faad14';
+  let color_success = '#52c41a';
+  let color_error = '#ff4d4f';
+  let color_link = '#1677ff';
   let color_text__link = color_link
 
   let color_bg = chroma(color_primary).tint(0.9999).desaturate(0.8);

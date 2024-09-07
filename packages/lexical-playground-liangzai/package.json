@@ -15,6 +15,7 @@
   "dependencies": {
     "@ant-design/icons": "^5.4.0",
     "@excalidraw/excalidraw": "^0.17.0",
+    "@fancyapps/ui": "^5.0.36",
     "@lexical/clipboard": "0.17.0",
     "@lexical/code": "0.17.0",
     "@lexical/file": "0.17.0",

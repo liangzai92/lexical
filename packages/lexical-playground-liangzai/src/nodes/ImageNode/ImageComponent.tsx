@@ -5,6 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
+import { Fancybox } from '@fancyapps/ui'
+import '@fancyapps/ui/dist/fancybox/fancybox.css'
+Fancybox.bind('[data-fancybox]', {
+  // Your custom options
+})
 
 import type {
   BaseSelection,
@@ -100,12 +105,26 @@ function LazyImage({
   className: string | null;
   height: 'inherit' | number;
   imageRef: { current: null | HTMLImageElement };
-  maxWidth: number;
+  maxWidth: number | undefined;
   src: string;
   width: 'inherit' | number;
   onError: () => void;
 }): JSX.Element {
   useSuspenseImage(src);
+
+  const preview = () => {
+    const bgList = [src]
+    const galleryItems = bgList.map((img) => {
+      return {
+        src: img,
+        thumb: img,
+      }
+    })
+    new Fancybox(galleryItems, {
+      startIndex: 0
+    });
+  }
+
   return (
     <img
       className={className || undefined}
@@ -119,6 +138,9 @@ function LazyImage({
       }}
       onError={onError}
       draggable="false"
+      onClick={() => {
+        // preview()
+      }}
     />
   );
 }

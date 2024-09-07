@@ -1,5 +1,5 @@
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
-import './index.css';
+import './index.scoped.scss';
 
 type Props = {
   className?: string;

@@ -84,6 +84,7 @@ body {
   position: relative;
   margin: 0 auto;
   /* min-height: 100%; */
+  width: 100%;
   max-width: 1080px;
   display: flex;
   .left-col {
@@ -763,8 +764,8 @@ pre::-webkit-scrollbar-thumb {
 }
 
 .editor-shell .editor-image img {
-  display: block;
-  height: auto;
+  // display: block;
+  // height: auto;
   max-width: 100%;
   cursor: default;
 }

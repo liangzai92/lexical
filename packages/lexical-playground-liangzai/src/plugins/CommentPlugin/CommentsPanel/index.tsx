@@ -156,6 +156,12 @@ function CommentsPanelListComment({
 
   return (
     <li className="CommentPlugin_CommentsPanel_List_Comment">
+      <p
+        className={
+          comment.deleted ? 'CommentPlugin_CommentsPanel_DeletedComment' : ''
+        }>
+        {comment.content}
+      </p>
       <div className="CommentPlugin_CommentsPanel_List_Details">
         <span className="CommentPlugin_CommentsPanel_List_Comment_Author">
           {comment.author}
@@ -164,12 +170,6 @@ function CommentsPanelListComment({
           · {seconds > -10 ? 'Just now' : rtf.format(minutes, 'minute')}
         </span>
       </div>
-      <p
-        className={
-          comment.deleted ? 'CommentPlugin_CommentsPanel_DeletedComment' : ''
-        }>
-        {comment.content}
-      </p>
       {!comment.deleted && (
         <>
           <Button
@@ -280,43 +280,45 @@ function CommentsPanelList({
               onClick={handleClickThread}
               className={`CommentPlugin_CommentsPanel_List_Thread ${markNodeMap.has(id) ? 'interactive' : ''
                 } ${activeIDs.indexOf(id) === -1 ? '' : 'active'}`}>
-              <div className="CommentPlugin_CommentsPanel_List_Thread_QuoteBox">
-                <blockquote className="CommentPlugin_CommentsPanel_List_Thread_Quote">
-                  <span>{commentOrThread.quote}</span>
-                </blockquote>
-                <Button
-                  className="CommentPlugin_CommentsPanel_List_DeleteButton"
-                  onClick={() => {
-                    showModal('删除同主题的评论', (onClose) => (
-                      <ShowDeleteCommentOrThreadDialog
-                        commentOrThread={commentOrThread}
-                        deleteCommentOrThread={deleteCommentOrThread}
-                        onClose={onClose}
-                      />
-                    ));
-                  }}
-                >
-                  <DeleteOutlined />
-                </Button>
-                {modal}
-              </div>
-              <ul className="CommentPlugin_CommentsPanel_List_Thread_Comments">
-                {commentOrThread.comments.map((comment) => (
-                  <CommentsPanelListComment
-                    key={comment.id}
-                    comment={comment}
-                    deleteComment={deleteCommentOrThread}
+              <div className='comment-thread-item-inner'>
+                <div className="CommentPlugin_CommentsPanel_List_Thread_QuoteBox">
+                  <blockquote className="CommentPlugin_CommentsPanel_List_Thread_Quote">
+                    <span>{commentOrThread.quote}</span>
+                  </blockquote>
+                  <Button
+                    className="CommentPlugin_CommentsPanel_List_DeleteButton"
+                    onClick={() => {
+                      showModal('删除同主题的评论', (onClose) => (
+                        <ShowDeleteCommentOrThreadDialog
+                          commentOrThread={commentOrThread}
+                          deleteCommentOrThread={deleteCommentOrThread}
+                          onClose={onClose}
+                        />
+                      ));
+                    }}
+                  >
+                    <DeleteOutlined />
+                  </Button>
+                  {modal}
+                </div>
+                <ul className="CommentPlugin_CommentsPanel_List_Thread_Comments">
+                  {commentOrThread.comments.map((comment) => (
+                    <CommentsPanelListComment
+                      key={comment.id}
+                      comment={comment}
+                      deleteComment={deleteCommentOrThread}
+                      thread={commentOrThread}
+                      rtf={rtf}
+                    />
+                  ))}
+                </ul>
+                <div className="CommentPlugin_CommentsPanel_List_Thread_Editor">
+                  <CommentsComposer
+                    submitAddComment={submitAddComment}
                     thread={commentOrThread}
-                    rtf={rtf}
+                    placeholder="回复评论"
                   />
-                ))}
-              </ul>
-              <div className="CommentPlugin_CommentsPanel_List_Thread_Editor">
-                <CommentsComposer
-                  submitAddComment={submitAddComment}
-                  thread={commentOrThread}
-                  placeholder="回复评论"
-                />
+                </div>
               </div>
             </li>
           );

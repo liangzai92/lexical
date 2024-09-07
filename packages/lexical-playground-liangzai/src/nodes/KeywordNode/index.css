@@ -1,5 +1,5 @@
 .keyword {
-  color: rgb(241, 118, 94);
+  color: var(--lz-color_warning);
   font-weight: bold;
   cursor: default;
 }

@@ -1,4 +1,5 @@
 .CommentPlugin_AddCommentBox {
+  display: none;
   z-index: 1;
   position: absolute;
   overflow: hidden;
@@ -7,9 +8,9 @@
   font-size: 12px;
 }
 
-@media (max-width: 1024px) {
+@media (min-width: 1024px) {
   .CommentPlugin_AddCommentBox {
-    display: none;
+    display: block;
   }
 }
 
@@ -133,8 +134,9 @@
   top: 0px;
   right: 0;
   height: calc(100%);
-  width: 30%;
-  max-width: 375px;
+  width: 430px;
+  max-width: 100%;
+  min-width: 375px;
   background-color: var(--lz-color_bg);
   box-shadow: -1px 0 12px var(--lz-color_text__contrast_with_bg__1);
   animation: show-comments 0.2s ease;
@@ -229,82 +231,69 @@ i.send {
   border-top: 1px solid var(--lz-color__border);
 }
 
-.CommentPlugin_CommentsPanel_List_Thread.active
-  .CommentPlugin_CommentsPanel_List_Comment:hover {
-  background-color: inherit;
-}
-
 .CommentPlugin_CommentsPanel_List_Comment p {
   margin: 0;
 }
 
 .CommentPlugin_CommentsPanel_List_Details {
-  padding-bottom: 5px;
-  vertical-align: top;
+  margin-top: 8px;
 }
 
 .CommentPlugin_CommentsPanel_List_Comment_Author {
   padding-right: 5px;
+  color: var(--lz-color_text__contrast_with_bg__5);
+  font-size: 12px;
 }
 
 .CommentPlugin_CommentsPanel_List_Comment_Time {
-  color: #999;
+  color: var(--lz-color_text__contrast_with_bg__4);
+  font-size: 12px;
 }
 
 .CommentPlugin_CommentsPanel_List_Thread {
   position: relative;
   margin: 0;
   padding: 0 0 0 0;
-  border: 1px solid var(--lz-color_text__contrast_with_bg__1);
-  border-left: 4px solid var(--lz-color_warning);
-  border-right: 0;
-  border-left: 0;
+  border-left: 3px solid transparent;
   transition: all 0.2s linear;
+  &.interactive {
+    cursor: pointer;
+  }
+  &.active {
+    border-left-color: var(--lz-color_warning);
+    cursor: inherit;
+  }
 }
 
-.CommentPlugin_CommentsPanel_List_Thread:first-child,
-.CommentPlugin_CommentsPanel_List_Thread
-  + .CommentPlugin_CommentsPanel_List_Thread {
-  border-top: none;
-}
-
-.CommentPlugin_CommentsPanel_List_Thread.interactive {
-  cursor: pointer;
-}
-
-.CommentPlugin_CommentsPanel_List_Thread.interactive:hover {
-  /* background-color: rgba(255, 212, 0, 0.1); */
-}
-
-.CommentPlugin_CommentsPanel_List_Thread.active {
-  border-left: 4px solid var(--lz-color_warning);
-  cursor: inherit;
+.comment-thread-item-inner {
+  border-bottom: 1px solid var(--lz-color_text__contrast_with_bg__1);
 }
 
 .CommentPlugin_CommentsPanel_List_Thread_Quote {
-  margin: 0;
-  padding: 8px;
-  color: var(--lz-color_text__contrast_with_bg__5);
-  /* 限制最大展示三行 */
-  max-height: 2.4em;
+  margin: 8px 15px;
+  margin-top: 0;
+  /* color: var(--lz-color_text__contrast_with_bg__10); */
+  /* 限制最大展示三行 这个计算出来的 2*fontSize * lineHeight */
+  max-height: 3em;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  span {
+    background-color: var(--lz-color_warning);
+  }
 }
 
 .CommentPlugin_CommentsPanel_List_Thread_Comments {
   list-style-type: none;
   margin: 0;
-  padding-left: 8px;
-}
-
-.CommentPlugin_CommentsPanel_List_Thread_Comments
+  padding-left: 15px;
   .CommentPlugin_CommentsPanel_List_Comment:first-child {
-  border: none;
-  margin-left: 0;
-  padding-left: 0;
+    border: none;
+    margin-left: 0;
+    padding-left: 0;
+  }
 }
 
 .CommentPlugin_CommentsPanel_List_Thread_Comments
@@ -320,7 +309,7 @@ i.send {
 .CommentPlugin_CommentsPanel_List_Thread_Editor {
   position: relative;
   padding-top: 1px;
-  margin: 8px;
+  margin: 8px 15px;
   display: flex;
   justify-content: space-between;
 }

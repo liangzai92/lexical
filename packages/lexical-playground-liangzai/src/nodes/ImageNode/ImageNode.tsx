@@ -30,7 +30,7 @@ export interface ImagePayload {
   caption?: LexicalEditor;
   height?: number;
   key?: NodeKey;
-  maxWidth?: number;
+  maxWidth?: number | undefined;
   showCaption?: boolean;
   src: string;
   width?: number;
@@ -74,7 +74,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
   __altText: string;
   __width: 'inherit' | number;
   __height: 'inherit' | number;
-  __maxWidth: number;
+  __maxWidth: number | undefined;
   __showCaption: boolean;
   __caption: LexicalEditor;
   // Captions cannot yet be used within editor cells
@@ -138,7 +138,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
   constructor(
     src: string,
     altText: string,
-    maxWidth: number,
+    maxWidth: number | undefined,
     width?: 'inherit' | number,
     height?: 'inherit' | number,
     showCaption?: boolean,
@@ -236,7 +236,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
 export function $createImageNode({
   altText,
   height,
-  // maxWidth = 500,
+  maxWidth,
   captionsEnabled,
   src,
   width,
@@ -248,7 +248,7 @@ export function $createImageNode({
     new ImageNode(
       src,
       altText,
-      // maxWidth,
+      maxWidth,
       width,
       height,
       showCaption,

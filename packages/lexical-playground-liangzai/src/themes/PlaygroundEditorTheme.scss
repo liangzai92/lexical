@@ -422,6 +422,9 @@
     background: var(--lz-color_warning__contrast_with_bg__1);
     color: var(--lz-color_text);
     transition: all 0.3s;
+    &:hover{
+      background: var(--lz-color_warning__contrast_with_bg__3);
+    }
     &.selected {
       background: var(--lz-color_warning__contrast_with_bg__4);
     }
