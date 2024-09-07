@@ -1,17 +1,10 @@
-/**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
 import {
   $convertFromMarkdownString,
   $convertToMarkdownString,
   CHECK_LIST,
   ELEMENT_TRANSFORMERS,
   ElementTransformer,
+  MULTILINE_ELEMENT_TRANSFORMERS,
   TEXT_FORMAT_TRANSFORMERS,
   TEXT_MATCH_TRANSFORMERS,
   TextMatchTransformer,
@@ -313,6 +306,7 @@ export const PLAYGROUND_TRANSFORMERS: Array<Transformer> = [
   TWEET,
   CHECK_LIST,
   ...ELEMENT_TRANSFORMERS,
+  ...MULTILINE_ELEMENT_TRANSFORMERS,
   ...TEXT_FORMAT_TRANSFORMERS,
   ...TEXT_MATCH_TRANSFORMERS,
 ];
