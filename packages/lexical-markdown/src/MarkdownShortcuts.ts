@@ -24,10 +24,13 @@ import {
   $isRootOrShadowRoot,
   $isTextNode,
   $setSelection,
+  COLLABORATION_TAG,
+  HISTORIC_TAG,
 } from 'lexical';
 import invariant from 'shared/invariant';
 
 import {TRANSFORMERS} from '.';
+import {canContainTransformableMarkdown} from './importTextTransformers';
 import {indexBy, PUNCTUATION_OR_SPACE, transformersByType} from './utils';
 
 function runElementTransformers(
@@ -158,6 +161,9 @@ function runTextMatchTransformers(
   }
 
   for (const transformer of transformers) {
+    if (!transformer.replace || !transformer.regExp) {
+      continue;
+    }
     const match = textContent.match(transformer.regExp);
 
     if (match === null) {
@@ -250,6 +256,9 @@ function $runTextFormatTransformers(
       }
 
       if ($isTextNode(sibling)) {
+        if (sibling.hasFormat('code')) {
+          continue;
+        }
         const siblingTextContent = sibling.getTextContent();
         openNode = sibling;
         openTagStartIndex = getOpenTagStartIndex(
@@ -389,11 +398,11 @@ export function registerMarkdownShortcuts(
   transformers: Array<Transformer> = TRANSFORMERS,
 ): () => void {
   const byType = transformersByType(transformers);
-  const textFormatTransformersIndex = indexBy(
+  const textFormatTransformersByTrigger = indexBy(
     byType.textFormat,
     ({tag}) => tag[tag.length - 1],
   );
-  const textMatchTransformersIndex = indexBy(
+  const textMatchTransformersByTrigger = indexBy(
     byType.textMatch,
     ({trigger}) => trigger,
   );
@@ -403,7 +412,7 @@ export function registerMarkdownShortcuts(
     if (
       type === 'element' ||
       type === 'text-match' ||
-      type === 'multilineElement'
+      type === 'multiline-element'
     ) {
       const dependencies = transformer.dependencies;
       for (const node of dependencies) {
@@ -449,7 +458,7 @@ export function registerMarkdownShortcuts(
       runTextMatchTransformers(
         anchorNode,
         anchorOffset,
-        textMatchTransformersIndex,
+        textMatchTransformersByTrigger,
       )
     ) {
       return;
@@ -458,14 +467,14 @@ export function registerMarkdownShortcuts(
     $runTextFormatTransformers(
       anchorNode,
       anchorOffset,
-      textFormatTransformersIndex,
+      textFormatTransformersByTrigger,
     );
   };
 
   return editor.registerUpdateListener(
     ({tags, dirtyLeaves, editorState, prevEditorState}) => {
       // Ignore updates from collaboration and undo/redo (as changes already calculated)
-      if (tags.has('collaboration') || tags.has('historic')) {
+      if (tags.has(COLLABORATION_TAG) || tags.has(HISTORIC_TAG)) {
         return;
       }
 
@@ -477,10 +486,13 @@ export function registerMarkdownShortcuts(
       const selection = editorState.read($getSelection);
       const prevSelection = prevEditorState.read($getSelection);
 
+      // We expect selection to be a collapsed range and not match previous one (as we want
+      // to trigger transforms only as user types)
       if (
         !$isRangeSelection(prevSelection) ||
         !$isRangeSelection(selection) ||
-        !selection.isCollapsed()
+        !selection.isCollapsed() ||
+        selection.is(prevSelection)
       ) {
         return;
       }
@@ -499,8 +511,7 @@ export function registerMarkdownShortcuts(
       }
 
       editor.update(() => {
-        // Markdown is not available inside code
-        if (anchorNode.hasFormat('code')) {
+        if (!canContainTransformableMarkdown(anchorNode)) {
           return;
         }
 

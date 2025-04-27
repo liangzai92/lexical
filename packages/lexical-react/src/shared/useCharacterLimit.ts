@@ -14,7 +14,7 @@ import {
   OverflowNode,
 } from '@lexical/overflow';
 import {$rootTextContent} from '@lexical/text';
-import {$dfs, mergeRegister} from '@lexical/utils';
+import {$dfs, $unwrapNode, mergeRegister} from '@lexical/utils';
 import {
   $getSelection,
   $isElementNode,
@@ -24,6 +24,7 @@ import {
   $setSelection,
   COMMAND_PRIORITY_LOW,
   DELETE_CHARACTER_COMMAND,
+  HISTORY_MERGE_TAG,
 } from 'lexical';
 import {useEffect} from 'react';
 import invariant from 'shared/invariant';
@@ -88,7 +89,7 @@ export function useCharacterLimit(
               $wrapOverflowedNodes(offset);
             },
             {
-              tag: 'history-merge',
+              tag: HISTORY_MERGE_TAG,
             },
           );
         }
@@ -252,18 +253,6 @@ function $wrapNode(node: LexicalNode): OverflowNode {
   node.replace(overflowNode);
   overflowNode.append(node);
   return overflowNode;
-}
-
-function $unwrapNode(node: OverflowNode): LexicalNode | null {
-  const children = node.getChildren();
-  const childrenLength = children.length;
-
-  for (let i = 0; i < childrenLength; i++) {
-    node.insertBefore(children[i]);
-  }
-
-  node.remove();
-  return childrenLength > 0 ? children[childrenLength - 1] : null;
 }
 
 export function $mergePrevious(overflowNode: OverflowNode): void {

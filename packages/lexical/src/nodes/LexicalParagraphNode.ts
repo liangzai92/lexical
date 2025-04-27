@@ -17,22 +17,21 @@ import type {
   DOMConversionOutput,
   DOMExportOutput,
   LexicalNode,
-  NodeKey,
 } from '../LexicalNode';
+import type {RangeSelection} from '../LexicalSelection';
 import type {
   ElementFormatType,
   SerializedElementNode,
 } from './LexicalElementNode';
-import type {RangeSelection} from 'lexical';
 
-import {TEXT_TYPE_TO_FORMAT} from '../LexicalConstants';
 import {
   $applyNodeReplacement,
   getCachedClassNameArray,
   isHTMLElement,
+  setNodeIndentFromDOM,
 } from '../LexicalUtils';
 import {ElementNode} from './LexicalElementNode';
-import {$isTextNode, TextFormatType} from './LexicalTextNode';
+import {$isTextNode} from './LexicalTextNode';
 
 export type SerializedParagraphNode = Spread<
   {
@@ -45,55 +44,13 @@ export type SerializedParagraphNode = Spread<
 /** @noInheritDoc */
 export class ParagraphNode extends ElementNode {
   ['constructor']!: KlassConstructor<typeof ParagraphNode>;
-  /** @internal */
-  __textFormat: number;
-  __textStyle: string;
-
-  constructor(key?: NodeKey) {
-    super(key);
-    this.__textFormat = 0;
-    this.__textStyle = '';
-  }
 
   static getType(): string {
     return 'paragraph';
   }
 
-  getTextFormat(): number {
-    const self = this.getLatest();
-    return self.__textFormat;
-  }
-
-  setTextFormat(type: number): this {
-    const self = this.getWritable();
-    self.__textFormat = type;
-    return self;
-  }
-
-  hasTextFormat(type: TextFormatType): boolean {
-    const formatFlag = TEXT_TYPE_TO_FORMAT[type];
-    return (this.getTextFormat() & formatFlag) !== 0;
-  }
-
-  getTextStyle(): string {
-    const self = this.getLatest();
-    return self.__textStyle;
-  }
-
-  setTextStyle(style: string): this {
-    const self = this.getWritable();
-    self.__textStyle = style;
-    return self;
-  }
-
   static clone(node: ParagraphNode): ParagraphNode {
     return new ParagraphNode(node.__key);
-  }
-
-  afterCloneFrom(prevNode: this) {
-    super.afterCloneFrom(prevNode);
-    this.__textFormat = prevNode.__textFormat;
-    this.__textStyle = prevNode.__textStyle;
   }
 
   // View
@@ -127,24 +84,13 @@ export class ParagraphNode extends ElementNode {
   exportDOM(editor: LexicalEditor): DOMExportOutput {
     const {element} = super.exportDOM(editor);
 
-    if (element && isHTMLElement(element)) {
+    if (isHTMLElement(element)) {
       if (this.isEmpty()) {
         element.append(document.createElement('br'));
       }
 
       const formatType = this.getFormatType();
       element.style.textAlign = formatType;
-
-      const direction = this.getDirection();
-      if (direction) {
-        element.dir = direction;
-      }
-      const indent = this.getIndent();
-      if (indent > 0) {
-        // padding-inline-start is not widely supported in email HTML, but
-        // Lexical Reconciler uses padding-inline-start. Using text-indent instead.
-        element.style.textIndent = `${indent * 20}px`;
-      }
     }
 
     return {
@@ -153,21 +99,15 @@ export class ParagraphNode extends ElementNode {
   }
 
   static importJSON(serializedNode: SerializedParagraphNode): ParagraphNode {
-    const node = $createParagraphNode();
-    node.setFormat(serializedNode.format);
-    node.setIndent(serializedNode.indent);
-    node.setDirection(serializedNode.direction);
-    node.setTextFormat(serializedNode.textFormat);
-    return node;
+    return $createParagraphNode().updateFromJSON(serializedNode);
   }
 
   exportJSON(): SerializedParagraphNode {
     return {
       ...super.exportJSON(),
+      // These are included explicitly for backwards compatibility
       textFormat: this.getTextFormat(),
       textStyle: this.getTextStyle(),
-      type: 'paragraph',
-      version: 1,
     };
   }
 
@@ -183,7 +123,7 @@ export class ParagraphNode extends ElementNode {
     const direction = this.getDirection();
     newElement.setDirection(direction);
     newElement.setFormat(this.getFormatType());
-    newElement.setStyle(this.getTextStyle());
+    newElement.setStyle(this.getStyle());
     this.insertAfter(newElement, restoreSelection);
     return newElement;
   }
@@ -217,10 +157,7 @@ function $convertParagraphElement(element: HTMLElement): DOMConversionOutput {
   const node = $createParagraphNode();
   if (element.style) {
     node.setFormat(element.style.textAlign as ElementFormatType);
-    const indent = parseInt(element.style.textIndent, 10) / 20;
-    if (indent > 0) {
-      node.setIndent(indent);
-    }
+    setNodeIndentFromDOM(element, node);
   }
   return {node};
 }

@@ -225,6 +225,11 @@ const config = {
 
   favicon: 'img/favicon.ico',
 
+  future: {
+    // See https://docusaurus.io/blog/releases/3.6
+    experimental_faster: true,
+  },
+
   markdown: {
     preprocessor: ({fileContent}) =>
       fileContent.replaceAll(
@@ -268,6 +273,17 @@ const config = {
         name: 'docusaurus-tailwindcss',
       };
     },
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        redirects: [
+          {
+            from: '/2024-recap',
+            to: 'https://github.com/facebook/lexical/discussions/7220',
+          },
+        ],
+      },
+    ],
   ].filter((plugin) => plugin != null),
 
   presets: [
@@ -330,6 +346,10 @@ const config = {
           },
           {
             items: [
+              {
+                href: 'https://discord.gg/KmG4wQnnD9',
+                label: 'Discord',
+              },
               {
                 href: 'https://stackoverflow.com/questions/tagged/lexicaljs',
                 label: 'Stack Overflow',

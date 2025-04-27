@@ -6,6 +6,7 @@
  *
  */
 
+import {IS_CHROME} from '@lexical/utils';
 import {
   $createParagraphNode,
   $isElementNode,
@@ -18,8 +19,6 @@ import {
   RangeSelection,
   SerializedElementNode,
 } from 'lexical';
-import {IS_CHROME} from 'shared/environment';
-import invariant from 'shared/invariant';
 
 import {$isCollapsibleContainerNode} from './CollapsibleContainerNode';
 import {$isCollapsibleContentNode} from './CollapsibleContentNode';
@@ -51,10 +50,11 @@ export class CollapsibleTitleNode extends ElementNode {
       dom.addEventListener('click', () => {
         editor.update(() => {
           const collapsibleContainer = this.getLatest().getParentOrThrow();
-          invariant(
-            $isCollapsibleContainerNode(collapsibleContainer),
-            'Expected parent node to be a CollapsibleContainerNode',
-          );
+          if (!$isCollapsibleContainerNode(collapsibleContainer)) {
+            throw new Error(
+              'Expected parent node to be a CollapsibleContainerNode',
+            );
+          }
           collapsibleContainer.toggleOpen();
         });
       });
@@ -62,7 +62,7 @@ export class CollapsibleTitleNode extends ElementNode {
     return dom;
   }
 
-  updateDOM(prevNode: CollapsibleTitleNode, dom: HTMLElement): boolean {
+  updateDOM(prevNode: this, dom: HTMLElement): boolean {
     return false;
   }
 
@@ -80,28 +80,14 @@ export class CollapsibleTitleNode extends ElementNode {
   static importJSON(
     serializedNode: SerializedCollapsibleTitleNode,
   ): CollapsibleTitleNode {
-    return $createCollapsibleTitleNode();
-  }
-
-  exportJSON(): SerializedCollapsibleTitleNode {
-    return {
-      ...super.exportJSON(),
-      type: 'collapsible-title',
-      version: 1,
-    };
-  }
-
-  collapseAtStart(_selection: RangeSelection): boolean {
-    this.getParentOrThrow().insertBefore(this);
-    return true;
+    return $createCollapsibleTitleNode().updateFromJSON(serializedNode);
   }
 
   static transform(): (node: LexicalNode) => void {
     return (node: LexicalNode) => {
-      invariant(
-        $isCollapsibleTitleNode(node),
-        'node is not a CollapsibleTitleNode',
-      );
+      if (!$isCollapsibleTitleNode(node)) {
+        throw new Error('node is not a CollapsibleTitleNode');
+      }
       if (node.isEmpty()) {
         node.remove();
       }

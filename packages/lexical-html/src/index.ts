@@ -29,6 +29,7 @@ import {
   $isTextNode,
   ArtificialNode__DO_NOT_USE,
   ElementNode,
+  isDocumentFragment,
   isInlineDomNode,
 } from 'lexical';
 
@@ -58,7 +59,7 @@ export function $generateNodesFromDOM(
       }
     }
   }
-  $unwrapArtificalNodes(allArtificialNodes);
+  $unwrapArtificialNodes(allArtificialNodes);
 
   return lexicalNodes;
 }
@@ -147,7 +148,7 @@ function $appendNodesToHTML(
   }
 
   if (shouldInclude && !shouldExclude) {
-    if (isHTMLElement(element)) {
+    if (isHTMLElement(element) || isDocumentFragment(element)) {
       element.append(fragment);
     }
     parentElement.append(element);
@@ -155,7 +156,11 @@ function $appendNodesToHTML(
     if (after) {
       const newElement = after.call(target, element);
       if (newElement) {
-        element.replaceWith(newElement);
+        if (isDocumentFragment(element)) {
+          element.replaceChildren(newElement);
+        } else {
+          element.replaceWith(newElement);
+        }
       }
     }
   } else {
@@ -181,7 +186,9 @@ function getConversionFunction(
       if (
         domConversion !== null &&
         (currentConversion === null ||
-          (currentConversion.priority || 0) < (domConversion.priority || 0))
+          // Given equal priority, prefer the last registered importer
+          // which is typically an application custom node or HTMLConfig['import']
+          (currentConversion.priority || 0) <= (domConversion.priority || 0))
       ) {
         currentConversion = domConversion;
       }
@@ -348,7 +355,7 @@ function wrapContinuousInlines(
   return out;
 }
 
-function $unwrapArtificalNodes(
+function $unwrapArtificialNodes(
   allArtificialNodes: Array<ArtificialNode__DO_NOT_USE>,
 ) {
   for (const node of allArtificialNodes) {
